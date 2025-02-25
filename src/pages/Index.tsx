@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { DollarSign, ChartBar, PiggyBank } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { toast } from "@/components/ui/use-toast";
+import { toast } from "sonner";
 
 const Index = () => {
   const [email, setEmail] = useState("");
@@ -13,14 +13,18 @@ const Index = () => {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
+    
     if (!email || !name) {
-      toast({
-        title: "Please fill in all fields",
-        variant: "destructive",
-      });
+      toast.error("Please fill in all fields");
       return;
     }
-    navigate("/info-collection", { state: { name, email } });
+
+    navigate("/info-collection", { 
+      state: { 
+        name, 
+        email 
+      }
+    });
   };
 
   return (
@@ -57,6 +61,7 @@ const Index = () => {
                   className="bg-white/20 border-white/20 text-white placeholder:text-white/60"
                   value={name}
                   onChange={(e) => setName(e.target.value)}
+                  required
                 />
               </div>
               <div>
@@ -66,6 +71,7 @@ const Index = () => {
                   className="bg-white/20 border-white/20 text-white placeholder:text-white/60"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
+                  required
                 />
               </div>
               <Button type="submit" className="w-full" size="lg">
