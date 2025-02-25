@@ -35,7 +35,13 @@ const Index = () => {
         },
       });
 
-      if (signUpError) throw signUpError;
+      if (signUpError) {
+        if (signUpError.status === 429) {
+          toast.error("Please wait a minute before trying again");
+          return;
+        }
+        throw signUpError;
+      }
 
       // Create a profile record
       const { error: profileError } = await supabase
@@ -146,3 +152,4 @@ const Index = () => {
 };
 
 export default Index;
+
