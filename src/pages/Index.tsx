@@ -5,13 +5,15 @@ import { DollarSign, ChartBar, PiggyBank } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { toast } from "sonner";
+import { supabase } from "@/lib/supabase";
 
 const Index = () => {
   const [email, setEmail] = useState("");
   const [name, setName] = useState("");
+  const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     
     if (!email || !name) {
@@ -19,12 +21,43 @@ const Index = () => {
       return;
     }
 
-    navigate("/info-collection", { 
-      state: { 
-        name, 
-        email 
-      }
-    });
+    setLoading(true);
+    
+    try {
+      // First, sign up the user
+      const { error: signUpError } = await supabase.auth.signUp({
+        email,
+        password: crypto.randomUUID(), // Generate a random password - users will set their own via magic link
+        options: {
+          data: {
+            full_name: name,
+          },
+        },
+      });
+
+      if (signUpError) throw signUpError;
+
+      // Create a profile record
+      const { error: profileError } = await supabase
+        .from('profiles')
+        .insert([{ id: email, full_name: name }]);
+
+      if (profileError) throw profileError;
+
+      toast.success("Check your email for the magic link to continue!");
+      
+      navigate("/info-collection", { 
+        state: { 
+          name, 
+          email 
+        }
+      });
+    } catch (error) {
+      console.error('Error:', error);
+      toast.error("Something went wrong. Please try again.");
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -62,6 +95,7 @@ const Index = () => {
                   value={name}
                   onChange={(e) => setName(e.target.value)}
                   required
+                  disabled={loading}
                 />
               </div>
               <div>
@@ -72,10 +106,11 @@ const Index = () => {
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   required
+                  disabled={loading}
                 />
               </div>
-              <Button type="submit" className="w-full" size="lg">
-                Begin Your Journey
+              <Button type="submit" className="w-full" size="lg" disabled={loading}>
+                {loading ? "Setting up your account..." : "Begin Your Journey"}
               </Button>
             </form>
           </div>
