@@ -1,5 +1,5 @@
 
-import { useLocation, Navigate } from "react-router-dom";
+import { useLocation, Navigate, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 
@@ -19,7 +19,7 @@ interface SchoolInfo {
 const SCHOOLS_DATA: SchoolInfo[] = [
   {
     name: "University of British Columbia",
-    logo: "https://images.unsplash.com/photo-1488590528505-98d2b5aba04b?auto=format&fit=crop&w=300&h=300",
+    logo: "/lovable-uploads/c33828a1-9c0c-4b97-bfdf-ebec721b736e.png",
     program: "Engineering Degree",
     website: "https://engineering.ubc.ca/",
     admissionGPA: 3.83,
@@ -31,7 +31,7 @@ const SCHOOLS_DATA: SchoolInfo[] = [
   },
   {
     name: "British Columbia Institute of Technology (BCIT)",
-    logo: "https://images.unsplash.com/photo-1518770660439-4636190af475?auto=format&fit=crop&w=300&h=300",
+    logo: "/lovable-uploads/d5b2677f-869b-4f23-ae7b-8f2ffdac0406.png",
     program: "Information Technology Management",
     website: "https://www.bcit.ca/",
     admissionGPA: 3.25,
@@ -43,7 +43,7 @@ const SCHOOLS_DATA: SchoolInfo[] = [
   },
   {
     name: "Simon Fraser University (SFU)",
-    logo: "https://images.unsplash.com/photo-1461749280684-dccba630e2f6?auto=format&fit=crop&w=300&h=300",
+    logo: "/lovable-uploads/23a8b5bf-5d39-4994-b080-b15ae4f8a454.png",
     program: "Business Administration",
     website: "https://beedie.sfu.ca/",
     admissionGPA: 3.65,
@@ -57,6 +57,7 @@ const SCHOOLS_DATA: SchoolInfo[] = [
 
 const Clipboard = () => {
   const location = useLocation();
+  const navigate = useNavigate();
   const state = location.state;
 
   if (!state) {
@@ -70,11 +71,11 @@ const Clipboard = () => {
           {SCHOOLS_DATA.map((school, index) => (
             <Card key={index} className="overflow-hidden backdrop-blur-lg bg-white/10">
               <div className="p-6 space-y-6">
-                <div className="aspect-square relative overflow-hidden rounded-lg mb-4">
+                <div className="aspect-square relative overflow-hidden rounded-lg mb-4 bg-white p-4">
                   <img 
                     src={school.logo} 
                     alt={`${school.name} Logo`}
-                    className="object-cover w-full h-full"
+                    className="object-contain w-full h-full"
                   />
                 </div>
                 <h3 className="text-xl font-bold">{school.name}</h3>
@@ -106,7 +107,10 @@ const Clipboard = () => {
             tailored to your chosen program and institution. Discover insights about admissions, 
             tuition, career outcomes, and more—all in one place!
           </p>
-          <Button className="w-full md:w-auto">
+          <Button 
+            className="w-full md:w-auto"
+            onClick={() => navigate("/cart")}
+          >
             View Cart & Purchase Compass
           </Button>
         </Card>
