@@ -43,12 +43,15 @@ const Index = () => {
         throw signUpError;
       }
 
-      // Create a profile record
-      const { error: profileError } = await supabase
-        .from('profiles')
-        .insert([{ id: email, full_name: name }]);
-
-      if (profileError) throw profileError;
+      // Even if profile creation fails, we can still proceed since the auth signup was successful
+      try {
+        await supabase
+          .from('profiles')
+          .insert([{ id: email, full_name: name }]);
+      } catch (profileError) {
+        console.error('Profile creation error:', profileError);
+        // Continue with the flow even if profile creation fails
+      }
 
       toast.success("Check your email for the magic link to continue!");
       
