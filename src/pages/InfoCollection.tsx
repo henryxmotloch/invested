@@ -1,5 +1,5 @@
 
-import { useLocation, Navigate } from "react-router-dom";
+import { useLocation, Navigate, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import {
@@ -18,6 +18,7 @@ interface LocationState {
 
 const InfoCollection = () => {
   const location = useLocation();
+  const navigate = useNavigate();
   const state = location.state as LocationState;
   const [location_, setLocation] = useState("");
   const [budget, setBudget] = useState("");
@@ -30,8 +31,14 @@ const InfoCollection = () => {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    // TODO: Implement next page navigation when ready
-    console.log("Form submitted:", { location_, budget, duration });
+    navigate("/clipboard", { 
+      state: { 
+        ...state,
+        location: location_,
+        budget,
+        duration
+      } 
+    });
   };
 
   return (
@@ -47,10 +54,10 @@ const InfoCollection = () => {
             <div className="space-y-2">
               <label className="text-lg font-medium">Preferred Campus Location:</label>
               <Select value={location_} onValueChange={setLocation}>
-                <SelectTrigger className="w-full bg-white/20 border-white/20">
+                <SelectTrigger className="w-full bg-white/40 border-white/20">
                   <SelectValue placeholder="Select a location..." />
                 </SelectTrigger>
-                <SelectContent>
+                <SelectContent className="bg-white border-white/20">
                   <SelectItem value="bc">British Columbia</SelectItem>
                   <SelectItem value="ab">Alberta</SelectItem>
                   <SelectItem value="sk">Saskatchewan</SelectItem>
@@ -66,10 +73,10 @@ const InfoCollection = () => {
             <div className="space-y-2">
               <label className="text-lg font-medium">Budget Range:</label>
               <Select value={budget} onValueChange={setBudget}>
-                <SelectTrigger className="w-full bg-white/20 border-white/20">
+                <SelectTrigger className="w-full bg-white/40 border-white/20">
                   <SelectValue placeholder="Select your budget..." />
                 </SelectTrigger>
-                <SelectContent>
+                <SelectContent className="bg-white border-white/20">
                   <SelectItem value="under-2k">Under $2,000</SelectItem>
                   <SelectItem value="2-5k">$2,500 - $5,000</SelectItem>
                   <SelectItem value="5-8k">$5,000 - $8,000</SelectItem>
@@ -81,10 +88,10 @@ const InfoCollection = () => {
             <div className="space-y-2">
               <label className="text-lg font-medium">How Long Would You Like to Study?</label>
               <Select value={duration} onValueChange={setDuration}>
-                <SelectTrigger className="w-full bg-white/20 border-white/20">
+                <SelectTrigger className="w-full bg-white/40 border-white/20">
                   <SelectValue placeholder="Select duration..." />
                 </SelectTrigger>
-                <SelectContent>
+                <SelectContent className="bg-white border-white/20">
                   <SelectItem value="6-months">6 months or less</SelectItem>
                   <SelectItem value="1-year">1 year</SelectItem>
                   <SelectItem value="2-years">2 years</SelectItem>
