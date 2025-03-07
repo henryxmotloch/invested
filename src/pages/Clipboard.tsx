@@ -1,5 +1,5 @@
 
-import { useLocation, Navigate, useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 
@@ -60,9 +60,15 @@ const Clipboard = () => {
   const navigate = useNavigate();
   const state = location.state;
 
-  if (!state) {
-    return <Navigate to="/" replace />;
-  }
+  // No redirect - allow direct access
+  // Use default values if state is missing
+  const userName = state?.name || "Visitor";
+  const userEmail = state?.email || "visitor@example.com";
+  const userLocation = state?.location || "N/A";
+  const userBudget = state?.budget || "N/A";
+  const userDuration = state?.duration || "N/A";
+
+  console.log("Clipboard page loaded", { userName, userEmail });
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-secondary to-secondary/95 text-secondary-foreground">
