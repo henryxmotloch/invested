@@ -45,7 +45,7 @@ const InfoCollection = () => {
     <div className="min-h-screen bg-gradient-to-b from-secondary to-secondary/95 text-secondary-foreground">
       <div className="container mx-auto px-4 py-12">
         <Card className="max-w-2xl mx-auto p-8 backdrop-blur-lg bg-white/10">
-          <h1 className="text-3xl font-bold mb-6">Welcome, {userName}!</h1>
+          <h1 className="text-3xl font-bold mb-6">Welcome, henry!</h1>
           <p className="text-lg text-muted-foreground mb-8">
             Enter your goals so the InvestEd compass can point you to success...
           </p>
