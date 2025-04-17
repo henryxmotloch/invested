@@ -1,4 +1,3 @@
-
 import { useLocation, Navigate, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
@@ -13,27 +12,25 @@ import { useState } from "react";
 
 interface LocationState {
   name: string;
-  email: string;
 }
 
 const InfoCollection = () => {
   const location = useLocation();
   const navigate = useNavigate();
-  const state = location.state as LocationState | null;
+  const state = location.state as LocationState;
   const [location_, setLocation] = useState("");
   const [budget, setBudget] = useState("");
   const [duration, setDuration] = useState("");
-  
-  // Temporarily using default name for demonstration
-  const userName = state?.name || "Visitor";
-  const userEmail = state?.email || "visitor@example.com";
+
+  if (!state?.name) {
+    return <Navigate to="/" replace />;
+  }
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     navigate("/clipboard", { 
       state: { 
-        name: userName,
-        email: userEmail,
+        name: state.name,
         location: location_,
         budget,
         duration
@@ -45,7 +42,7 @@ const InfoCollection = () => {
     <div className="min-h-screen bg-gradient-to-b from-secondary to-secondary/95 text-secondary-foreground">
       <div className="container mx-auto px-4 py-12">
         <Card className="max-w-2xl mx-auto p-8 backdrop-blur-lg bg-white/10">
-          <h1 className="text-3xl font-bold mb-6">Welcome, henry!</h1>
+          <h1 className="text-3xl font-bold mb-6">Welcome, {state.name}!</h1>
           <p className="text-lg text-muted-foreground mb-8">
             Enter your goals so the InvestEd compass can point you to success...
           </p>
