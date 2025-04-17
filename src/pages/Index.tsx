@@ -8,7 +8,6 @@ import { toast } from "sonner";
 import { supabase } from "@/lib/supabase";
 
 const Index = () => {
-  const [email, setEmail] = useState("");
   const [name, setName] = useState("");
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
@@ -16,49 +15,17 @@ const Index = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     
-    if (!email || !name) {
-      toast.error("Please fill in all fields");
+    if (!name) {
+      toast.error("Please enter your name");
       return;
     }
 
     setLoading(true);
     
     try {
-      // First, sign up the user
-      const { error: signUpError } = await supabase.auth.signUp({
-        email,
-        password: crypto.randomUUID(), // Generate a random password - users will set their own via magic link
-        options: {
-          data: {
-            full_name: name,
-          },
-        },
-      });
-
-      if (signUpError) {
-        if (signUpError.status === 429) {
-          toast.error("Please wait a minute before trying again");
-          return;
-        }
-        throw signUpError;
-      }
-
-      // Even if profile creation fails, we can still proceed since the auth signup was successful
-      try {
-        await supabase
-          .from('profiles')
-          .insert([{ id: email, full_name: name }]);
-      } catch (profileError) {
-        console.error('Profile creation error:', profileError);
-        // Continue with the flow even if profile creation fails
-      }
-
-      toast.success("Check your email for the magic link to continue!");
-      
       navigate("/info-collection", { 
         state: { 
-          name, 
-          email 
+          name 
         }
       });
     } catch (error) {
@@ -107,17 +74,6 @@ const Index = () => {
                   disabled={loading}
                 />
               </div>
-              <div>
-                <Input
-                  type="email"
-                  placeholder="Your Email"
-                  className="bg-white/20 border-white/20 text-white placeholder:text-white/60"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  required
-                  disabled={loading}
-                />
-              </div>
               <Button type="submit" className="w-full" size="lg" disabled={loading}>
                 {loading ? "Setting up your account..." : "Begin Your Journey"}
               </Button>
@@ -155,4 +111,3 @@ const Index = () => {
 };
 
 export default Index;
-
