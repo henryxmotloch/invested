@@ -9,6 +9,7 @@ import InfoCollection from "./pages/InfoCollection";
 import NotFound from "./pages/NotFound";
 import Clipboard from "./pages/Clipboard";
 import Cart from "./pages/Cart";
+import Checkout from "./pages/Checkout";
 
 const queryClient = new QueryClient();
 
@@ -23,6 +24,7 @@ const App = () => (
           <Route path="/info-collection" element={<InfoCollection />} />
           <Route path="/clipboard" element={<Clipboard />} />
           <Route path="/cart" element={<Cart />} />
+          <Route path="/checkout" element={<Checkout />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </BrowserRouter>
