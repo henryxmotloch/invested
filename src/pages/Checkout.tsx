@@ -6,6 +6,7 @@ import { useAuth } from "@/hooks/useAuth";
 import { supabase } from "@/integrations/supabase/client";
 import { useNavigate } from "react-router-dom";
 import { toast } from "@/components/ui/use-toast";
+import { Loader } from "lucide-react";
 
 const Checkout = () => {
   const [isProcessing, setIsProcessing] = useState(false);
@@ -24,33 +25,20 @@ const Checkout = () => {
 
     setIsProcessing(true);
     try {
-      const purchaseData = {
-        PurchaseID: crypto.randomUUID(),
-        CustomerID: user.id,
-        PurchaseDate: new Date().toISOString(),
-        TransactionID: crypto.randomUUID(),
-      };
-
-      const { error } = await supabase
-        .from("Purchase")
-        .insert(purchaseData);
-
-      if (error) throw error;
-
-      toast({
-        title: "Purchase successful!",
-        description: "Thank you for your purchase",
-      });
+      const { data, error } = await supabase.functions.invoke('create-checkout');
       
-      navigate("/dashboard");
+      if (error) throw error;
+      
+      if (data?.url) {
+        window.location.href = data.url;
+      }
     } catch (error) {
-      console.error("Purchase error:", error);
+      console.error("Checkout error:", error);
       toast({
-        title: "Purchase failed",
-        description: "There was an error processing your purchase",
+        title: "Checkout failed",
+        description: "There was an error initiating the checkout process",
         variant: "destructive",
       });
-    } finally {
       setIsProcessing(false);
     }
   };
@@ -73,7 +61,14 @@ const Checkout = () => {
               onClick={handlePurchase}
               disabled={isProcessing}
             >
-              {isProcessing ? "Processing..." : "Complete Purchase"}
+              {isProcessing ? (
+                <>
+                  <Loader className="animate-spin mr-2" />
+                  Redirecting to checkout...
+                </>
+              ) : (
+                "Complete Purchase"
+              )}
             </Button>
           </div>
         </Card>
