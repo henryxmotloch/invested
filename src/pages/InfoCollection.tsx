@@ -1,3 +1,4 @@
+
 import { useLocation, Navigate, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
@@ -9,6 +10,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { useState } from "react";
+import { useAuth } from "@/components/AuthProvider";
 
 interface LocationState {
   name: string;
@@ -17,6 +19,7 @@ interface LocationState {
 const InfoCollection = () => {
   const location = useLocation();
   const navigate = useNavigate();
+  const { user } = useAuth();
   const state = location.state as LocationState;
   const [location_, setLocation] = useState("");
   const [budget, setBudget] = useState("");
