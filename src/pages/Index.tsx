@@ -5,7 +5,8 @@ import { DollarSign, ChartBar, PiggyBank } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { toast } from "sonner";
-import { supabase } from "@/lib/supabase";
+import { supabase } from "@/integrations/supabase/client";
+import { v4 as uuidv4 } from "uuid";
 
 const Index = () => {
   const [name, setName] = useState("");
@@ -23,9 +24,28 @@ const Index = () => {
     setLoading(true);
     
     try {
+      // Save the user's name to Supabase
+      const userId = uuidv4();
+      const { error } = await supabase
+        .from("Users")
+        .insert([
+          { 
+            "User ID": userId, 
+            "Display name": name,
+            "Created at": new Date().toISOString()
+          }
+        ]);
+      
+      if (error) {
+        throw error;
+      }
+      
+      toast.success("Welcome to InvestEd!");
+      
       navigate("/info-collection", { 
         state: { 
-          name 
+          name,
+          userId 
         }
       });
     } catch (error) {
