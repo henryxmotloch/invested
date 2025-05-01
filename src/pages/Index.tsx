@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { DollarSign, ChartBar, PiggyBank } from "lucide-react";
@@ -24,28 +23,17 @@ const Index = () => {
     setLoading(true);
     
     try {
-      // Save the user's name to Supabase
+      // Instead of inserting directly, we'll pass the user information via navigation state
+      // This avoids the RLS policy issue
       const userId = uuidv4();
-      const { error } = await supabase
-        .from("Users")
-        .insert([
-          { 
-            "User ID": userId, 
-            "Display name": name,
-            "Created at": new Date().toISOString()
-          }
-        ]);
-      
-      if (error) {
-        throw error;
-      }
       
       toast.success("Welcome to InvestEd!");
       
       navigate("/info-collection", { 
         state: { 
           name,
-          userId 
+          userId,
+          createdAt: new Date().toISOString()
         }
       });
     } catch (error) {
