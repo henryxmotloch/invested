@@ -5,15 +5,12 @@ import { DollarSign, ChartBar, PiggyBank } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { toast } from "sonner";
-import { supabase } from "@/integrations/supabase/client";
 import { v4 as uuidv4 } from "uuid";
-import { useAuth } from "@/components/AuthProvider";
 
 const Index = () => {
   const [name, setName] = useState("");
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
-  const { user } = useAuth();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -23,35 +20,31 @@ const Index = () => {
       return;
     }
 
-    if (!user) {
-      toast.error("Please sign in first");
-      navigate("/auth");
-      return;
-    }
-
     setLoading(true);
     
     try {
-      // Save the user's name to Supabase
-      const { error } = await supabase
-        .from("Users")
-        .insert([
-          { 
-            "User ID": user.id, 
-            "Display name": name,
-            "Created at": new Date().toISOString()
-          }
-        ]);
+      // Generate a unique ID for this user
+      const userId = uuidv4();
       
-      if (error) {
-        throw error;
+      // Call our Edge Function to save the user data
+      const response = await fetch("/api/save-user-info", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ name, userId }),
+      });
+      
+      const result = await response.json();
+      
+      if (!response.ok) {
+        throw new Error(result.error || "Failed to save user information");
       }
       
       toast.success("Welcome to InvestEd!");
       
       navigate("/info-collection", { 
         state: { 
-          name
+          name,
+          userId
         }
       });
     } catch (error) {
@@ -70,24 +63,6 @@ const Index = () => {
           <h1 className="text-3xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-primary to-accent">
             InvestEd
           </h1>
-          <div>
-            {user ? (
-              <div className="flex items-center space-x-4">
-                <span className="text-sm text-white/80">Welcome, {user.email}</span>
-                <Button 
-                  variant="outline" 
-                  onClick={async () => {
-                    await supabase.auth.signOut();
-                    navigate('/auth');
-                  }}
-                >
-                  Sign Out
-                </Button>
-              </div>
-            ) : (
-              <Button onClick={() => navigate('/auth')}>Sign In</Button>
-            )}
-          </div>
         </nav>
 
         {/* Hero Section */}
@@ -115,17 +90,12 @@ const Index = () => {
                   value={name}
                   onChange={(e) => setName(e.target.value)}
                   required
-                  disabled={loading || !user}
+                  disabled={loading}
                 />
               </div>
-              <Button type="submit" className="w-full" size="lg" disabled={loading || !user}>
-                {loading ? "Setting up your account..." : user ? "Begin Your Journey" : "Sign in to continue"}
+              <Button type="submit" className="w-full" size="lg" disabled={loading}>
+                {loading ? "Setting up your account..." : "Begin Your Journey"}
               </Button>
-              {!user && (
-                <p className="text-center text-sm text-white/60 pt-2">
-                  You need to sign in before starting your journey
-                </p>
-              )}
             </form>
           </div>
         </div>
