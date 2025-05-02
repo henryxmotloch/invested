@@ -10,6 +10,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { useState } from "react";
+import { toast } from "sonner";
 
 interface LocationState {
   name: string;
@@ -23,22 +24,31 @@ const InfoCollection = () => {
   const [location_, setLocation] = useState("");
   const [budget, setBudget] = useState("");
   const [duration, setDuration] = useState("");
+  const [fieldOfStudy, setFieldOfStudy] = useState("");
 
   if (!state?.name) {
     return <Navigate to="/" replace />;
   }
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    navigate("/clipboard", { 
-      state: { 
-        name: state.name,
-        userId: state.userId,
-        location: location_,
-        budget,
-        duration
-      } 
-    });
+    
+    try {
+      // Navigate to payment options, passing along the selected options
+      navigate("/payment-option", { 
+        state: { 
+          name: state.name,
+          userId: state.userId,
+          location: location_,
+          budget,
+          duration,
+          fieldOfStudy
+        } 
+      });
+    } catch (error) {
+      console.error('Error:', error);
+      toast.error("Something went wrong. Please try again.");
+    }
   };
 
   return (
@@ -51,6 +61,25 @@ const InfoCollection = () => {
           </p>
           
           <form onSubmit={handleSubmit} className="space-y-6">
+            <div className="space-y-2">
+              <label className="text-lg font-medium">Field of Study:</label>
+              <Select value={fieldOfStudy} onValueChange={setFieldOfStudy}>
+                <SelectTrigger className="w-full bg-white/40 border-white/20">
+                  <SelectValue placeholder="Select your field of study..." />
+                </SelectTrigger>
+                <SelectContent className="bg-white border-white/20">
+                  <SelectItem value="business">Business</SelectItem>
+                  <SelectItem value="computer-science">Computer Science</SelectItem>
+                  <SelectItem value="engineering">Engineering</SelectItem>
+                  <SelectItem value="medicine">Medicine</SelectItem>
+                  <SelectItem value="arts">Arts</SelectItem>
+                  <SelectItem value="education">Education</SelectItem>
+                  <SelectItem value="law">Law</SelectItem>
+                  <SelectItem value="other">Other</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+            
             <div className="space-y-2">
               <label className="text-lg font-medium">Preferred Campus Location:</label>
               <Select value={location_} onValueChange={setLocation}>

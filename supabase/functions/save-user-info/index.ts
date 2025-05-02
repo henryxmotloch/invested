@@ -20,7 +20,15 @@ serve(async (req) => {
     
     const supabaseAdmin = createClient(supabaseUrl, supabaseServiceKey);
     
-    const { name, userId } = await req.json();
+    const { 
+      name, 
+      userId, 
+      location = null, 
+      budget = null, 
+      fieldOfStudy = null, 
+      duration = null, 
+      paymentOption = null
+    } = await req.json();
     
     if (!name || !userId) {
       return new Response(
@@ -29,6 +37,8 @@ serve(async (req) => {
       );
     }
 
+    console.log("Saving user data:", { name, userId, location, budget, fieldOfStudy, duration, paymentOption });
+
     // Insert user data with the admin client (bypassing RLS)
     const { data, error } = await supabaseAdmin
       .from("Users")
@@ -36,7 +46,12 @@ serve(async (req) => {
         { 
           "User ID": userId, 
           "Display name": name,
-          "Created at": new Date().toISOString()
+          "Created at": new Date().toISOString(),
+          "Location": location,
+          "Budget": budget,
+          "Field of Study": fieldOfStudy,
+          "Duration": duration,
+          "Payment Option": paymentOption
         }
       ]);
     
