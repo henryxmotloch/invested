@@ -39,28 +39,38 @@ serve(async (req) => {
 
     console.log("Saving user data:", { name, userId, location, budget, fieldOfStudy, duration, paymentOption });
 
+    // Get columns info to ensure we're using the correct column names
+    const { data: columnsInfo, error: columnsError } = await supabaseAdmin
+      .from("Users")
+      .select()
+      .limit(1);
+
+    if (columnsError) {
+      console.error("Error fetching columns info:", columnsError);
+      throw new Error(`Column info check failed: ${columnsError.message}`);
+    }
+    
     // Insert user data with the admin client (bypassing RLS)
-    // Use the exact column names from the database
     const { data, error } = await supabaseAdmin
       .from("Users")
-      .insert([
-        { 
-          "User ID": userId, 
-          "Display name": name,
-          "Created at": new Date().toISOString(),
-          "Location": location,
-          "Field of Study": fieldOfStudy,
-          "Budget": budget,
-          "Duration": duration,
-          "Payment Option": paymentOption
-        }
-      ])
+      .insert({
+        "User ID": userId,
+        "Display name": name,
+        "Created at": new Date().toISOString(),
+        "Location": location,
+        "Field of Study": fieldOfStudy,
+        "Budget": budget,
+        "Duration": duration,
+        "Payment Option": paymentOption
+      })
       .select();
     
     if (error) {
       console.error("Database error:", error);
       throw error;
     }
+    
+    console.log("User data saved successfully:", data);
     
     return new Response(
       JSON.stringify({ success: true, data }),

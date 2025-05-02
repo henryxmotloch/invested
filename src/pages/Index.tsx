@@ -37,11 +37,13 @@ const Index = () => {
         body: JSON.stringify({ name, userId }),
       });
       
-      const result = await response.json();
-      
       if (!response.ok) {
-        throw new Error(result.error || "Failed to save user information");
+        const errorData = await response.json();
+        throw new Error(errorData.error || "Failed to save user information");
       }
+      
+      const result = await response.json();
+      console.log("Save user response:", result);
       
       toast.success("Welcome to InvestEd!");
       
@@ -52,7 +54,7 @@ const Index = () => {
         }
       });
     } catch (error) {
-      console.error('Error:', error);
+      console.error('Error saving user info:', error);
       toast.error("Something went wrong. Please try again.");
     } finally {
       setLoading(false);
