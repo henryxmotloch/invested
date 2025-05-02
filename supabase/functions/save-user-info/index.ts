@@ -40,6 +40,7 @@ serve(async (req) => {
     console.log("Saving user data:", { name, userId, location, budget, fieldOfStudy, duration, paymentOption });
 
     // Insert user data with the admin client (bypassing RLS)
+    // Use the exact column names from the database
     const { data, error } = await supabaseAdmin
       .from("Users")
       .insert([
@@ -48,12 +49,13 @@ serve(async (req) => {
           "Display name": name,
           "Created at": new Date().toISOString(),
           "Location": location,
-          "Budget": budget,
           "Field of Study": fieldOfStudy,
+          "Budget": budget,
           "Duration": duration,
           "Payment Option": paymentOption
         }
-      ]);
+      ])
+      .select();
     
     if (error) {
       console.error("Database error:", error);
