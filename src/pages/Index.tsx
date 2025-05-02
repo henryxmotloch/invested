@@ -26,6 +26,8 @@ const Index = () => {
       // Generate a unique ID for this user
       const userId = uuidv4();
       
+      console.log("Submitting user data:", { name, userId });
+      
       // Call our Edge Function to save the user data
       const response = await fetch("https://ypiokkuwqqmytxthcunp.supabase.co/functions/v1/save-user-info", {
         method: "POST",
@@ -37,12 +39,21 @@ const Index = () => {
         body: JSON.stringify({ name, userId }),
       });
       
-      if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(errorData.error || "Failed to save user information");
+      const responseText = await response.text();
+      console.log("Raw response:", responseText);
+      
+      let result;
+      try {
+        result = JSON.parse(responseText);
+      } catch (e) {
+        console.error("Error parsing response:", e);
+        throw new Error("Invalid response from server");
       }
       
-      const result = await response.json();
+      if (!response.ok) {
+        throw new Error(result.error || "Failed to save user information");
+      }
+      
       console.log("Save user response:", result);
       
       toast.success("Welcome to InvestEd!");
