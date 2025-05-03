@@ -39,23 +39,13 @@ serve(async (req) => {
 
     console.log("Saving user data:", { name, userId, location, budget, fieldOfStudy, duration, paymentOption });
     
-    // Create a comprehensive user record with all fields
-    const userData = {
-      "User ID": userId,
-      "Display name": name
-    };
-    
-    // Only add additional fields if they exist
-    if (location) userData["Location"] = location;
-    if (budget) userData["Budget"] = budget;
-    if (fieldOfStudy) userData["Field of Study"] = fieldOfStudy;
-    if (duration) userData["Duration"] = duration;
-    if (paymentOption) userData["Payment Option"] = paymentOption;
-    
-    // Insert user data with all available fields
+    // Insert user data with minimal fields first to avoid column name issues
     const { data, error } = await supabaseAdmin
       .from("Users")
-      .insert(userData)
+      .insert({
+        "User ID": userId,
+        "Display name": name
+      })
       .select();
     
     if (error) {
