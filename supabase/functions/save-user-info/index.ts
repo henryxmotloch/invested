@@ -39,6 +39,18 @@ serve(async (req) => {
 
     console.log("Saving user data:", { name, userId, location, budget, fieldOfStudy, duration, paymentOption });
     
+    // First, let's log all available columns to help with debugging
+    const { data: tableInfo, error: tableError } = await supabaseAdmin
+      .from("Users")
+      .select('*')
+      .limit(1);
+    
+    if (tableError) {
+      console.error("Error fetching table structure:", tableError);
+    } else {
+      console.log("Available columns:", tableInfo.length > 0 ? Object.keys(tableInfo[0]) : "No data available");
+    }
+    
     // Check if the user already exists
     const { data: existingUser, error: fetchError } = await supabaseAdmin
       .from("Users")
@@ -57,19 +69,25 @@ serve(async (req) => {
       };
       
       // Only add fields if they have values
-      if (location) updateData["Location"] = location;
-      if (budget) updateData["Budget"] = budget;
-      if (fieldOfStudy) updateData["Field of Study"] = fieldOfStudy;
-      if (duration) updateData["Duration"] = duration;
-      if (paymentOption) updateData["Payment Option"] = paymentOption;
+      if (location !== null) updateData["Location"] = location;
+      if (budget !== null) updateData["Budget"] = budget;
+      if (fieldOfStudy !== null) updateData["Field of Study"] = fieldOfStudy;
+      if (duration !== null) updateData["Duration"] = duration;
+      if (paymentOption !== null) updateData["Payment Option"] = paymentOption;
+      
+      console.log("Updating user with data:", updateData);
       
       const { data, error } = await supabaseAdmin
         .from("Users")
         .update(updateData)
         .eq("User ID", userId)
         .select();
-        
-      if (error) throw error;
+      
+      if (error) {
+        console.error("Error updating user:", error);
+        throw error;
+      }
+      
       result = data;
       console.log("Updated existing user:", result);
     } else {
@@ -80,18 +98,24 @@ serve(async (req) => {
       };
       
       // Only add fields if they have values
-      if (location) insertData["Location"] = location;
-      if (budget) insertData["Budget"] = budget;
-      if (fieldOfStudy) insertData["Field of Study"] = fieldOfStudy;
-      if (duration) insertData["Duration"] = duration;
-      if (paymentOption) insertData["Payment Option"] = paymentOption;
+      if (location !== null) insertData["Location"] = location;
+      if (budget !== null) insertData["Budget"] = budget;
+      if (fieldOfStudy !== null) insertData["Field of Study"] = fieldOfStudy;
+      if (duration !== null) insertData["Duration"] = duration;
+      if (paymentOption !== null) insertData["Payment Option"] = paymentOption;
+      
+      console.log("Inserting new user with data:", insertData);
       
       const { data, error } = await supabaseAdmin
         .from("Users")
         .insert(insertData)
         .select();
-        
-      if (error) throw error;
+      
+      if (error) {
+        console.error("Error inserting user:", error);
+        throw error;
+      }
+      
       result = data;
       console.log("Inserted new user:", result);
     }
