@@ -34,7 +34,22 @@ const PaymentOption = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     
+    if (!paymentOption) {
+      toast.error("Please select a payment option");
+      return;
+    }
+    
     try {
+      console.log("Submitting payment data:", { 
+        name: state.name,
+        userId: state.userId,
+        location: state.location,
+        budget: state.budget,
+        duration: state.duration,
+        fieldOfStudy: state.fieldOfStudy,
+        paymentOption
+      });
+      
       // Update user record with selected payment option
       const response = await fetch("https://ypiokkuwqqmytxthcunp.supabase.co/functions/v1/save-user-info", {
         method: "POST",
@@ -53,10 +68,24 @@ const PaymentOption = () => {
         }),
       });
       
-      if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(errorData.error || "Failed to update payment information");
+      const responseText = await response.text();
+      console.log("Raw response:", responseText);
+      
+      let result;
+      try {
+        result = JSON.parse(responseText);
+      } catch (e) {
+        console.error("Error parsing response:", e);
+        throw new Error("Invalid response from server");
       }
+      
+      if (!response.ok) {
+        throw new Error(result.error || "Failed to update payment information");
+      }
+      
+      console.log("Save payment response:", result);
+      
+      toast.success("Payment option saved!");
       
       navigate("/clipboard", { 
         state: { 
