@@ -39,27 +39,65 @@ serve(async (req) => {
 
     console.log("Saving user data:", { name, userId, location, budget, fieldOfStudy, duration, paymentOption });
     
-    // Insert user data with minimal fields first to avoid column name issues
-    const { data, error } = await supabaseAdmin
+    // Check if the user already exists
+    const { data: existingUser, error: fetchError } = await supabaseAdmin
       .from("Users")
-      .insert({
+      .select("*")
+      .eq("User ID", userId)
+      .maybeSingle();
+    
+    console.log("Existing user check:", { existingUser, fetchError });
+    
+    let result;
+    
+    if (existingUser) {
+      // Update the existing user
+      const updateData = {
+        "Display name": name
+      };
+      
+      // Only add fields if they have values
+      if (location) updateData["Location"] = location;
+      if (budget) updateData["Budget"] = budget;
+      if (fieldOfStudy) updateData["Field of Study"] = fieldOfStudy;
+      if (duration) updateData["Duration"] = duration;
+      if (paymentOption) updateData["Payment Option"] = paymentOption;
+      
+      const { data, error } = await supabaseAdmin
+        .from("Users")
+        .update(updateData)
+        .eq("User ID", userId)
+        .select();
+        
+      if (error) throw error;
+      result = data;
+      console.log("Updated existing user:", result);
+    } else {
+      // Insert a new user
+      const insertData = {
         "User ID": userId,
         "Display name": name
-      })
-      .select();
-    
-    if (error) {
-      console.error("Database error:", error);
-      return new Response(
-        JSON.stringify({ error: error.message }),
-        { status: 500, headers: { ...corsHeaders, "Content-Type": "application/json" } }
-      );
+      };
+      
+      // Only add fields if they have values
+      if (location) insertData["Location"] = location;
+      if (budget) insertData["Budget"] = budget;
+      if (fieldOfStudy) insertData["Field of Study"] = fieldOfStudy;
+      if (duration) insertData["Duration"] = duration;
+      if (paymentOption) insertData["Payment Option"] = paymentOption;
+      
+      const { data, error } = await supabaseAdmin
+        .from("Users")
+        .insert(insertData)
+        .select();
+        
+      if (error) throw error;
+      result = data;
+      console.log("Inserted new user:", result);
     }
     
-    console.log("User data saved successfully:", data);
-    
     return new Response(
-      JSON.stringify({ success: true, data }),
+      JSON.stringify({ success: true, data: result }),
       { status: 200, headers: { ...corsHeaders, "Content-Type": "application/json" } }
     );
     

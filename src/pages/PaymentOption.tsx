@@ -26,6 +26,7 @@ const PaymentOption = () => {
   const navigate = useNavigate();
   const state = location.state as LocationState;
   const [paymentOption, setPaymentOption] = useState("");
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   if (!state?.name) {
     return <Navigate to="/" replace />;
@@ -34,7 +35,19 @@ const PaymentOption = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     
+    if (!paymentOption) {
+      toast.error("Please select a payment option");
+      return;
+    }
+    
+    setIsSubmitting(true);
+    
     try {
+      console.log("Submitting payment info:", { 
+        ...state, 
+        paymentOption 
+      });
+      
       // Update user record with selected payment option
       const response = await fetch("https://ypiokkuwqqmytxthcunp.supabase.co/functions/v1/save-user-info", {
         method: "POST",
@@ -53,10 +66,22 @@ const PaymentOption = () => {
         }),
       });
       
-      if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(errorData.error || "Failed to update payment information");
+      const responseText = await response.text();
+      console.log("Raw response:", responseText);
+      
+      let data;
+      try {
+        data = JSON.parse(responseText);
+      } catch (e) {
+        console.error("Error parsing response:", e);
+        throw new Error("Invalid response from server");
       }
+      
+      if (!response.ok) {
+        throw new Error(data.error || "Failed to update payment information");
+      }
+      
+      console.log("Payment info updated successfully:", data);
       
       navigate("/clipboard", { 
         state: { 
@@ -67,6 +92,8 @@ const PaymentOption = () => {
     } catch (error) {
       console.error('Error updating payment info:', error);
       toast.error("Failed to update your payment information. Please try again.");
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
@@ -96,8 +123,8 @@ const PaymentOption = () => {
               </Select>
             </div>
 
-            <Button type="submit" className="w-full">
-              Next
+            <Button type="submit" disabled={isSubmitting} className="w-full">
+              {isSubmitting ? "Submitting..." : "Next"}
             </Button>
           </form>
         </Card>
