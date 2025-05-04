@@ -6,7 +6,7 @@ import { useAuth } from "@/hooks/useAuth";
 import { supabase } from "@/integrations/supabase/client";
 import { useNavigate } from "react-router-dom";
 import { toast } from "@/components/ui/use-toast";
-import { Loader, PayPal } from "lucide-react";
+import { Loader, CreditCard } from "lucide-react";
 
 const Checkout = () => {
   const [isProcessing, setIsProcessing] = useState(false);
@@ -67,7 +67,7 @@ const Checkout = () => {
                 </>
               ) : (
                 <>
-                  <PayPal className="mr-2" />
+                  <CreditCard className="mr-2" />
                   Complete Purchase with PayPal
                 </>
               )}
