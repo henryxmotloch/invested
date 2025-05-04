@@ -69,10 +69,10 @@ serve(async (req) => {
       };
       
       // Only add fields if they have values
-      if (location !== null) updateData["Location"] = location;
-      if (budget !== null) updateData["Budget"] = budget;
+      if (location !== null) updateData["Preferred Campus Location"] = location;
+      if (budget !== null) updateData["Budget Range"] = budget;
       if (fieldOfStudy !== null) updateData["Field of Study"] = fieldOfStudy;
-      if (duration !== null) updateData["Duration"] = duration;
+      if (duration !== null) updateData["Study Duration"] = duration;
       if (paymentOption !== null) updateData["Payment Option"] = paymentOption;
       
       console.log("Updating user with data:", updateData);
@@ -98,10 +98,10 @@ serve(async (req) => {
       };
       
       // Only add fields if they have values
-      if (location !== null) insertData["Location"] = location;
-      if (budget !== null) insertData["Budget"] = budget;
+      if (location !== null) insertData["Preferred Campus Location"] = location;
+      if (budget !== null) insertData["Budget Range"] = budget;
       if (fieldOfStudy !== null) insertData["Field of Study"] = fieldOfStudy;
-      if (duration !== null) insertData["Duration"] = duration;
+      if (duration !== null) insertData["Study Duration"] = duration;
       if (paymentOption !== null) insertData["Payment Option"] = paymentOption;
       
       console.log("Inserting new user with data:", insertData);

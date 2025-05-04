@@ -173,30 +173,30 @@ export type Database = {
       }
       Users: {
         Row: {
-          "Created at": string | null
+          "Budget Range": string | null
           "Display name": string | null
-          LastName: string | null
-          Phone: string | null
-          "Provider Type": string | null
-          Providers: string | null
+          "Field of Study": string | null
+          "Payment Option": string | null
+          "Preferred Campus Location": string | null
+          "Study Duration": string | null
           "User ID": string
         }
         Insert: {
-          "Created at"?: string | null
+          "Budget Range"?: string | null
           "Display name"?: string | null
-          LastName?: string | null
-          Phone?: string | null
-          "Provider Type"?: string | null
-          Providers?: string | null
+          "Field of Study"?: string | null
+          "Payment Option"?: string | null
+          "Preferred Campus Location"?: string | null
+          "Study Duration"?: string | null
           "User ID": string
         }
         Update: {
-          "Created at"?: string | null
+          "Budget Range"?: string | null
           "Display name"?: string | null
-          LastName?: string | null
-          Phone?: string | null
-          "Provider Type"?: string | null
-          Providers?: string | null
+          "Field of Study"?: string | null
+          "Payment Option"?: string | null
+          "Preferred Campus Location"?: string | null
+          "Study Duration"?: string | null
           "User ID"?: string
         }
         Relationships: []
