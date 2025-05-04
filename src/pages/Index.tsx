@@ -1,11 +1,9 @@
-
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { DollarSign, ChartBar, PiggyBank } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { toast } from "sonner";
-import { v4 as uuidv4 } from "uuid";
 
 const Index = () => {
   const [name, setName] = useState("");
@@ -23,8 +21,8 @@ const Index = () => {
     setLoading(true);
     
     try {
-      // Generate a unique ID for this user
-      const userId = uuidv4();
+      // Generate a simple numeric ID, starting from 1
+      const userId = "1";
       
       console.log("Submitting user data:", { name, userId });
       
