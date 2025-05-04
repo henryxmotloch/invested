@@ -16,8 +16,8 @@ const Checkout = () => {
     try {
       // Simulate processing
       setTimeout(() => {
-        // Redirect to PayPal
-        window.location.href = "https://www.paypal.com";
+        // Redirect to Success page instead of PayPal
+        navigate("/success");
       }, 1500);
     } catch (error) {
       console.error("Checkout error:", error);
