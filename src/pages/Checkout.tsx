@@ -6,7 +6,7 @@ import { useAuth } from "@/hooks/useAuth";
 import { supabase } from "@/integrations/supabase/client";
 import { useNavigate } from "react-router-dom";
 import { toast } from "@/components/ui/use-toast";
-import { Loader } from "lucide-react";
+import { Loader, PayPal } from "lucide-react";
 
 const Checkout = () => {
   const [isProcessing, setIsProcessing] = useState(false);
@@ -24,14 +24,13 @@ const Checkout = () => {
     }
 
     setIsProcessing(true);
+    
     try {
-      const { data, error } = await supabase.functions.invoke('create-checkout');
-      
-      if (error) throw error;
-      
-      if (data?.url) {
-        window.location.href = data.url;
-      }
+      // Simulate processing
+      setTimeout(() => {
+        // Redirect to PayPal
+        window.location.href = "https://www.paypal.com";
+      }, 1500);
     } catch (error) {
       console.error("Checkout error:", error);
       toast({
@@ -64,10 +63,13 @@ const Checkout = () => {
               {isProcessing ? (
                 <>
                   <Loader className="animate-spin mr-2" />
-                  Redirecting to checkout...
+                  Redirecting to PayPal...
                 </>
               ) : (
-                "Complete Purchase"
+                <>
+                  <PayPal className="mr-2" />
+                  Complete Purchase with PayPal
+                </>
               )}
             </Button>
           </div>
