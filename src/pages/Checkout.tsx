@@ -2,27 +2,15 @@
 import { useState } from "react";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { useAuth } from "@/hooks/useAuth";
-import { supabase } from "@/integrations/supabase/client";
 import { useNavigate } from "react-router-dom";
 import { toast } from "@/components/ui/use-toast";
 import { Loader, CreditCard } from "lucide-react";
 
 const Checkout = () => {
   const [isProcessing, setIsProcessing] = useState(false);
-  const { user } = useAuth();
   const navigate = useNavigate();
 
   const handlePurchase = async () => {
-    if (!user) {
-      toast({
-        title: "Authentication required",
-        description: "Please sign in to complete your purchase",
-        variant: "destructive",
-      });
-      return;
-    }
-
     setIsProcessing(true);
     
     try {
