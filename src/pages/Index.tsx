@@ -1,3 +1,4 @@
+
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { DollarSign, ChartBar, PiggyBank } from "lucide-react";
@@ -21,8 +22,8 @@ const Index = () => {
     setLoading(true);
     
     try {
-      // Generate a simple numeric ID, starting from 1
-      const userId = "1";
+      // Generate a unique user ID based on timestamp
+      const userId = Date.now().toString();
       
       console.log("Submitting user data:", { name, userId });
       

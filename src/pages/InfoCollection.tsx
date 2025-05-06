@@ -68,6 +68,7 @@ const InfoCollection = () => {
                   <SelectValue placeholder="Select your field of study..." />
                 </SelectTrigger>
                 <SelectContent className="bg-white border-white/20">
+                  <SelectItem value="any">Any Field</SelectItem>
                   <SelectItem value="business">Business</SelectItem>
                   <SelectItem value="computer-science">Computer Science</SelectItem>
                   <SelectItem value="engineering">Engineering</SelectItem>
@@ -75,6 +76,8 @@ const InfoCollection = () => {
                   <SelectItem value="arts">Arts</SelectItem>
                   <SelectItem value="education">Education</SelectItem>
                   <SelectItem value="law">Law</SelectItem>
+                  <SelectItem value="agriculture">Agriculture</SelectItem>
+                  <SelectItem value="culinary">Culinary Arts</SelectItem>
                   <SelectItem value="other">Other</SelectItem>
                 </SelectContent>
               </Select>
@@ -87,6 +90,7 @@ const InfoCollection = () => {
                   <SelectValue placeholder="Select a location..." />
                 </SelectTrigger>
                 <SelectContent className="bg-white border-white/20">
+                  <SelectItem value="any">Any Location</SelectItem>
                   <SelectItem value="bc">British Columbia</SelectItem>
                   <SelectItem value="ab">Alberta</SelectItem>
                   <SelectItem value="sk">Saskatchewan</SelectItem>
@@ -106,8 +110,9 @@ const InfoCollection = () => {
                   <SelectValue placeholder="Select your budget..." />
                 </SelectTrigger>
                 <SelectContent className="bg-white border-white/20">
+                  <SelectItem value="any">Any Budget</SelectItem>
                   <SelectItem value="under-2k">Under $2,000</SelectItem>
-                  <SelectItem value="2-5k">$2,500 - $5,000</SelectItem>
+                  <SelectItem value="2-5k">$2,000 - $5,000</SelectItem>
                   <SelectItem value="5-8k">$5,000 - $8,000</SelectItem>
                   <SelectItem value="8k-plus">Over $8,000</SelectItem>
                 </SelectContent>
@@ -121,6 +126,7 @@ const InfoCollection = () => {
                   <SelectValue placeholder="Select program type..." />
                 </SelectTrigger>
                 <SelectContent className="bg-white border-white/20">
+                  <SelectItem value="any">Any Type</SelectItem>
                   <SelectItem value="certificate">Certificate</SelectItem>
                   <SelectItem value="diploma">Diploma</SelectItem>
                   <SelectItem value="degree">Degree</SelectItem>
