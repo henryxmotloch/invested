@@ -23,7 +23,7 @@ const InfoCollection = () => {
   const state = location.state as LocationState;
   const [location_, setLocation] = useState("");
   const [budget, setBudget] = useState("");
-  const [duration, setDuration] = useState("");
+  const [programType, setProgramType] = useState("");
   const [fieldOfStudy, setFieldOfStudy] = useState("");
 
   if (!state?.name) {
@@ -41,7 +41,7 @@ const InfoCollection = () => {
           userId: state.userId,
           location: location_,
           budget,
-          duration,
+          programType,
           fieldOfStudy
         } 
       });
@@ -115,17 +115,15 @@ const InfoCollection = () => {
             </div>
 
             <div className="space-y-2">
-              <label className="text-lg font-medium">How Long Would You Like to Study?</label>
-              <Select value={duration} onValueChange={setDuration}>
+              <label className="text-lg font-medium">Program Type:</label>
+              <Select value={programType} onValueChange={setProgramType}>
                 <SelectTrigger className="w-full bg-white/40 border-white/20">
-                  <SelectValue placeholder="Select duration..." />
+                  <SelectValue placeholder="Select program type..." />
                 </SelectTrigger>
                 <SelectContent className="bg-white border-white/20">
-                  <SelectItem value="6-months">6 months or less</SelectItem>
-                  <SelectItem value="1-year">1 year</SelectItem>
-                  <SelectItem value="2-years">2 years</SelectItem>
-                  <SelectItem value="4-years">4 years</SelectItem>
-                  <SelectItem value="longer">More than 4 years</SelectItem>
+                  <SelectItem value="certificate">Certificate</SelectItem>
+                  <SelectItem value="diploma">Diploma</SelectItem>
+                  <SelectItem value="degree">Degree</SelectItem>
                 </SelectContent>
               </Select>
             </div>

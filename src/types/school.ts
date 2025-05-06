@@ -3,6 +3,7 @@ export interface SchoolInfo {
   name: string;
   logo: string;
   program: string;
+  programType: string; // New field: diploma, certificate, degree
   website: string;
   province: string;
   admissionGPA: number;

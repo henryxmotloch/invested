@@ -3,155 +3,13 @@ import { useState, useEffect } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { toast } from "sonner";
 import { SchoolInfo } from "@/types/school";
+import { DEFAULT_SCHOOLS } from "@/data/schools";
 import UserPreferences from "@/components/schools/UserPreferences";
 import SchoolsList from "@/components/schools/SchoolsList";
 import SchoolsLoading from "@/components/schools/SchoolsLoading";
 import CompassPromotion from "@/components/schools/CompassPromotion";
 import { Button } from "@/components/ui/button";
-
-// Sample school data covering multiple provinces
-const SAMPLE_SCHOOLS: SchoolInfo[] = [
-  {
-    name: "University of British Columbia",
-    logo: "/lovable-uploads/23a8b5bf-5d39-4994-b080-b15ae4f8a454.png",
-    program: "Computer Science",
-    website: "https://cs.ubc.ca/",
-    province: "bc",
-    admissionGPA: 3.7,
-    admissionRate: 15,
-    tuitionDomestic: 5500,
-    tuitionInternational: 42000,
-    placementRate: 92,
-    averageIncome: 85000,
-    programDuration: "4 years"
-  },
-  {
-    name: "University of Toronto",
-    logo: "/lovable-uploads/d5b2677f-869b-4f23-ae7b-8f2ffdac0406.png",
-    program: "Computer Engineering",
-    website: "https://engineering.utoronto.ca/",
-    province: "on",
-    admissionGPA: 3.8,
-    admissionRate: 12,
-    tuitionDomestic: 6400,
-    tuitionInternational: 58000,
-    placementRate: 95,
-    averageIncome: 92000,
-    programDuration: "4 years"
-  },
-  {
-    name: "McGill University",
-    logo: "/lovable-uploads/c33828a1-9c0c-4b97-bfdf-ebec721b736e.png",
-    program: "Business Administration",
-    website: "https://www.mcgill.ca/desautels/",
-    province: "qc",
-    admissionGPA: 3.6,
-    admissionRate: 25,
-    tuitionDomestic: 4200,
-    tuitionInternational: 45000,
-    placementRate: 90,
-    averageIncome: 78000,
-    programDuration: "4 years"
-  },
-  {
-    name: "University of Alberta",
-    logo: "/placeholder.svg",
-    program: "Engineering",
-    website: "https://www.ualberta.ca/engineering/",
-    province: "ab",
-    admissionGPA: 3.5,
-    admissionRate: 35,
-    tuitionDomestic: 5800,
-    tuitionInternational: 32000,
-    placementRate: 88,
-    averageIncome: 82000,
-    programDuration: "4 years"
-  },
-  {
-    name: "University of Saskatchewan",
-    logo: "/placeholder.svg",
-    program: "Agriculture",
-    website: "https://agbio.usask.ca/",
-    province: "sk",
-    admissionGPA: 3.2,
-    admissionRate: 60,
-    tuitionDomestic: 7200,
-    tuitionInternational: 28000,
-    placementRate: 85,
-    averageIncome: 68000,
-    programDuration: "4 years"
-  },
-  {
-    name: "Dalhousie University",
-    logo: "/placeholder.svg",
-    program: "Marine Biology",
-    website: "https://www.dal.ca/faculty/science/biology.html",
-    province: "mt",
-    admissionGPA: 3.4,
-    admissionRate: 45,
-    tuitionDomestic: 8600,
-    tuitionInternational: 25000,
-    placementRate: 80,
-    averageIncome: 65000,
-    programDuration: "4 years"
-  },
-  {
-    name: "University of Manitoba",
-    logo: "/placeholder.svg",
-    program: "Health Sciences",
-    website: "https://umanitoba.ca/health-sciences/",
-    province: "mb",
-    admissionGPA: 3.6,
-    admissionRate: 40,
-    tuitionDomestic: 5100,
-    tuitionInternational: 22000,
-    placementRate: 90,
-    averageIncome: 75000,
-    programDuration: "4 years"
-  },
-  {
-    name: "Algonquin College",
-    logo: "/placeholder.svg",
-    program: "Software Development",
-    website: "https://www.algonquincollege.com/",
-    province: "on",
-    admissionGPA: 2.8,
-    admissionRate: 75,
-    tuitionDomestic: 3500,
-    tuitionInternational: 15000,
-    placementRate: 85,
-    averageIncome: 68000,
-    programDuration: "2 years"
-  },
-  {
-    name: "BCIT",
-    logo: "/placeholder.svg",
-    program: "Web Development",
-    website: "https://www.bcit.ca/",
-    province: "bc",
-    admissionGPA: 3.0,
-    admissionRate: 65,
-    tuitionDomestic: 4200,
-    tuitionInternational: 16500,
-    placementRate: 92,
-    averageIncome: 72000,
-    programDuration: "2 years"
-  },
-  {
-    name: "Conestoga College",
-    logo: "/placeholder.svg",
-    program: "Business",
-    website: "https://www.conestogac.on.ca/",
-    province: "on",
-    admissionGPA: 2.6,
-    admissionRate: 80,
-    tuitionDomestic: 2900,
-    tuitionInternational: 14000,
-    placementRate: 80,
-    averageIncome: 55000,
-    programDuration: "3 years"
-  }
-];
+import { supabase } from "@/integrations/supabase/client";
 
 // Helper function to map location codes to province names
 const getProvinceName = (code: string): string => {
@@ -184,19 +42,15 @@ const getBudgetRange = (code: string): [number, number] => {
   }
 };
 
-// Helper function to map duration codes to program durations
-const getDurationRange = (code: string): string => {
+// Helper function to get program type display name
+const getProgramTypeDisplay = (code: string): string => {
   switch (code) {
-    case "6-months":
-      return "6 months";
-    case "1-year":
-      return "1 year";
-    case "2-years":
-      return "2 years";
-    case "4-years":
-      return "4 years";
-    case "longer":
-      return "More than 4 years";
+    case "certificate":
+      return "Certificate";
+    case "diploma":
+      return "Diploma";
+    case "degree":
+      return "Degree";
     default:
       return "";
   }
@@ -211,24 +65,25 @@ const Clipboard = () => {
 
   // Get user preferences from state or use defaults
   const userName = state?.name || "Visitor";
+  const userId = state?.userId || "";
   const userLocation = state?.location || "";
   const userBudget = state?.budget || "";
-  const userDuration = state?.duration || "";
+  const userProgramType = state?.programType || "";
   const userField = state?.fieldOfStudy || "";
 
   // Function to filter schools based on user preferences
   const filterSchools = () => {
-    // Start with all sample schools
-    let filteredSchools = [...SAMPLE_SCHOOLS];
+    // Start with all schools from our dataset
+    let filteredSchools = [...DEFAULT_SCHOOLS];
     
-    // Filter by province/location if specified
+    // Apply filters only if they are selected (less restrictive search)
     if (userLocation && userLocation !== "remote") {
       filteredSchools = filteredSchools.filter(school => 
         school.province === userLocation
       );
     }
     
-    // Filter by program/field if specified
+    // Filter by program/field if specified and not set to "other"
     if (userField && userField !== "other") {
       // Get programs related to the field
       const fieldPrograms = getRelatedPrograms(userField);
@@ -246,24 +101,44 @@ const Clipboard = () => {
         school.tuitionDomestic >= minBudget && school.tuitionDomestic <= maxBudget
       );
     }
+
+    // Filter by program type if specified
+    if (userProgramType) {
+      filteredSchools = filteredSchools.filter(school =>
+        school.programType === userProgramType
+      );
+    }
     
-    // Adapt search results with user preferences
-    return filteredSchools.map(school => {
-      // Create a copy to avoid modifying the original
-      const customizedSchool = { ...school };
+    // Save user preferences to Supabase
+    if (userId) {
+      saveUserPreferences();
+    }
+
+    return filteredSchools;
+  };
+
+  // Save user preferences to Supabase
+  const saveUserPreferences = async () => {
+    try {
+      const { data, error } = await supabase
+        .from('Users')
+        .insert([
+          { 
+            'User ID': Date.now().toString(), // Generate a unique ID based on timestamp
+            'Display name': userName,
+            'Field of Study': userField,
+            'Preferred Campus Location': userLocation,
+            'Budget Range': userBudget,
+            'Payment Option': null
+          }
+        ]);
       
-      // Adjust program if needed
-      if (userField && userField !== "other") {
-        customizedSchool.program = getProgramNameFromField(userField);
+      if (error) {
+        console.error('Error saving user preferences:', error);
       }
-      
-      // Adjust program duration if specified
-      if (userDuration) {
-        customizedSchool.programDuration = getDurationRange(userDuration);
-      }
-      
-      return customizedSchool;
-    });
+    } catch (error) {
+      console.error('Error saving user preferences:', error);
+    }
   };
 
   // Helper function to get related programs based on field
@@ -327,11 +202,7 @@ const Clipboard = () => {
         setLoading(false);
       }
     }, 1500);
-  }, [userField, userLocation, userBudget, userDuration]);
-
-  const handleAddToCart = () => {
-    navigate("/cart");
-  };
+  }, [userField, userLocation, userBudget, userProgramType]);
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-secondary to-secondary/95 text-secondary-foreground">
@@ -344,7 +215,7 @@ const Clipboard = () => {
               userField={userField ? getProgramNameFromField(userField) : "Any"}
               userLocation={userLocation ? getProvinceName(userLocation) : "Any"}
               userBudget={userBudget || "Any"}
-              userDuration={userDuration ? getDurationRange(userDuration) : "Any"}
+              userProgramType={userProgramType ? getProgramTypeDisplay(userProgramType) : "Any"}
             />
 
             {schools.length > 0 ? (

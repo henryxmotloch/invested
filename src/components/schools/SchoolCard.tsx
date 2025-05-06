@@ -11,6 +11,14 @@ interface SchoolCardProps {
 const SchoolCard = ({ school }: SchoolCardProps) => {
   const navigate = useNavigate();
   
+  // Function to capitalize first letter of each word
+  const capitalize = (text: string): string => {
+    return text
+      .split(' ')
+      .map(word => word.charAt(0).toUpperCase() + word.slice(1))
+      .join(' ');
+  };
+  
   return (
     <Card className="overflow-hidden backdrop-blur-lg bg-white/10">
       <div className="p-6 space-y-6">
@@ -27,7 +35,8 @@ const SchoolCard = ({ school }: SchoolCardProps) => {
         <h3 className="text-xl font-bold">{school.name}</h3>
         <div className="space-y-2 text-sm">
           <p><span className="font-semibold">Program:</span> {school.program}</p>
-          <p><span className="font-semibold">Province:</span> {school.province}</p>
+          <p><span className="font-semibold">Program Type:</span> {capitalize(school.programType)}</p>
+          <p><span className="font-semibold">Province:</span> {school.province.toUpperCase()}</p>
           {school.programDuration && (
             <p><span className="font-semibold">Duration:</span> {school.programDuration}</p>
           )}

@@ -6,10 +6,10 @@ interface UserPreferencesProps {
   userField: string;
   userLocation: string;
   userBudget: string;
-  userDuration: string;
+  userProgramType: string;
 }
 
-const UserPreferences = ({ userField, userLocation, userBudget, userDuration }: UserPreferencesProps) => {
+const UserPreferences = ({ userField, userLocation, userBudget, userProgramType }: UserPreferencesProps) => {
   const navigate = useNavigate();
   
   // Function to format budget display
@@ -25,6 +25,20 @@ const UserPreferences = ({ userField, userLocation, userBudget, userDuration }: 
         return "Over $8,000";
       default:
         return budget;
+    }
+  };
+
+  // Function to format program type display
+  const formatProgramType = (type: string): string => {
+    switch (type) {
+      case "certificate":
+        return "Certificate";
+      case "diploma":
+        return "Diploma";
+      case "degree":
+        return "Degree";
+      default:
+        return type;
     }
   };
   
@@ -54,7 +68,7 @@ const UserPreferences = ({ userField, userLocation, userBudget, userDuration }: 
             <span className="font-semibold">Budget:</span> {formatBudget(userBudget)}
           </div>
           <div className="bg-white/5 p-3 rounded">
-            <span className="font-semibold">Duration:</span> {userDuration}
+            <span className="font-semibold">Program Type:</span> {formatProgramType(userProgramType)}
           </div>
         </div>
       </div>
