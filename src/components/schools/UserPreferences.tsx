@@ -1,6 +1,6 @@
 
 import { Button } from "@/components/ui/button";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 
 interface UserPreferencesProps {
   userField: string;
@@ -11,35 +11,17 @@ interface UserPreferencesProps {
 
 const UserPreferences = ({ userField, userLocation, userBudget, userProgramType }: UserPreferencesProps) => {
   const navigate = useNavigate();
+  const location = useLocation();
+  const state = location.state || {};
   
-  // Function to format budget display
-  const formatBudget = (budget: string): string => {
-    switch (budget) {
-      case "under-2k":
-        return "Under $2,000";
-      case "2-5k":
-        return "$2,000 - $5,000";
-      case "5-8k":
-        return "$5,000 - $8,000";
-      case "8k-plus":
-        return "Over $8,000";
-      default:
-        return budget;
-    }
-  };
-
-  // Function to format program type display
-  const formatProgramType = (type: string): string => {
-    switch (type) {
-      case "certificate":
-        return "Certificate";
-      case "diploma":
-        return "Diploma";
-      case "degree":
-        return "Degree";
-      default:
-        return type;
-    }
+  const handleRefineSearch = () => {
+    // Preserve the user data when navigating back to info collection
+    navigate("/info-collection", { 
+      state: { 
+        name: state.name,
+        userId: state.userId
+      }
+    });
   };
   
   return (
@@ -48,7 +30,7 @@ const UserPreferences = ({ userField, userLocation, userBudget, userProgramType 
         <h2 className="text-2xl font-bold">Search Results</h2>
         <Button 
           variant="outline" 
-          onClick={() => navigate("/info-collection")}
+          onClick={handleRefineSearch}
           className="bg-white/20"
         >
           Refine Search
@@ -65,10 +47,10 @@ const UserPreferences = ({ userField, userLocation, userBudget, userProgramType 
             <span className="font-semibold">Location:</span> {userLocation}
           </div>
           <div className="bg-white/5 p-3 rounded">
-            <span className="font-semibold">Budget:</span> {formatBudget(userBudget)}
+            <span className="font-semibold">Budget:</span> {userBudget}
           </div>
           <div className="bg-white/5 p-3 rounded">
-            <span className="font-semibold">Program Type:</span> {formatProgramType(userProgramType)}
+            <span className="font-semibold">Program Type:</span> {userProgramType}
           </div>
         </div>
       </div>

@@ -179,7 +179,12 @@ const Clipboard = () => {
                 <h2 className="text-2xl font-bold mb-4">No schools found matching your criteria</h2>
                 <p className="mb-6">Try adjusting your preferences to find more results.</p>
                 <Button 
-                  onClick={() => navigate("/info-collection")}
+                  onClick={() => navigate("/info-collection", {
+                    state: {
+                      name: userName,
+                      userId: userId
+                    }
+                  })}
                   className="mr-4"
                 >
                   Adjust Preferences

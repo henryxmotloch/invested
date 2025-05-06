@@ -176,27 +176,21 @@ export type Database = {
           "Budget Range": string | null
           "Display name": string | null
           "Field of Study": string | null
-          "Payment Option": string | null
           "Preferred Campus Location": string | null
-          "Study Duration": string | null
           "User ID": string
         }
         Insert: {
           "Budget Range"?: string | null
           "Display name"?: string | null
           "Field of Study"?: string | null
-          "Payment Option"?: string | null
           "Preferred Campus Location"?: string | null
-          "Study Duration"?: string | null
           "User ID": string
         }
         Update: {
           "Budget Range"?: string | null
           "Display name"?: string | null
           "Field of Study"?: string | null
-          "Payment Option"?: string | null
           "Preferred Campus Location"?: string | null
-          "Study Duration"?: string | null
           "User ID"?: string
         }
         Relationships: []

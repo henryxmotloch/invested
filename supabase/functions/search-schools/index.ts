@@ -23,8 +23,9 @@ serve(async (req) => {
     
     console.log("Search parameters:", { fieldOfStudy, location, budget, programType });
     
-    // Define sample schools with more variety
+    // Define expanded school dataset with much more variety
     const schools = [
+      // British Columbia Schools
       {
         name: "University of British Columbia",
         logo: "/lovable-uploads/c33828a1-9c0c-4b97-bfdf-ebec721b736e.png",
@@ -38,6 +39,21 @@ serve(async (req) => {
         tuitionInternational: 35000,
         placementRate: 0.92,
         averageIncome: 82000,
+        programDuration: "4 years",
+      },
+      {
+        name: "University of British Columbia",
+        logo: "/lovable-uploads/c33828a1-9c0c-4b97-bfdf-ebec721b736e.png",
+        program: "Business Administration",
+        programType: "degree",
+        website: "https://www.ubc.ca",
+        province: "bc",
+        admissionGPA: 3.5,
+        admissionRate: 0.55,
+        tuitionDomestic: 5300,
+        tuitionInternational: 32000,
+        placementRate: 0.90,
+        averageIncome: 79000,
         programDuration: "4 years",
       },
       {
@@ -56,6 +72,21 @@ serve(async (req) => {
         programDuration: "2 years",
       },
       {
+        name: "BCIT",
+        logo: "/lovable-uploads/23a8b5bf-5d39-4994-b080-b15ae4f8a454.png",
+        program: "Business Management",
+        programType: "certificate",
+        website: "https://www.bcit.ca",
+        province: "bc",
+        admissionGPA: 2.8,
+        admissionRate: 0.75,
+        tuitionDomestic: 1800,
+        tuitionInternational: 12000,
+        placementRate: 0.85,
+        averageIncome: 58000,
+        programDuration: "1 year",
+      },
+      {
         name: "Simon Fraser University",
         logo: "/lovable-uploads/d5b2677f-869b-4f23-ae7b-8f2ffdac0406.png",
         program: "Data Science",
@@ -71,6 +102,23 @@ serve(async (req) => {
         programDuration: "4 years",
       },
       {
+        name: "Langara College",
+        logo: "https://upload.wikimedia.org/wikipedia/en/thumb/8/8c/Langara_College_logo.svg/1200px-Langara_College_logo.svg.png",
+        program: "Web Development",
+        programType: "diploma",
+        website: "https://www.langara.ca",
+        province: "bc",
+        admissionGPA: 2.9,
+        admissionRate: 0.72,
+        tuitionDomestic: 2800,
+        tuitionInternational: 14000,
+        placementRate: 0.83,
+        averageIncome: 62000,
+        programDuration: "2 years",
+      },
+
+      // Ontario Schools
+      {
         name: "University of Toronto",
         logo: "https://upload.wikimedia.org/wikipedia/en/thumb/9/9a/University_of_Toronto_seal.svg/1200px-University_of_Toronto_seal.svg.png",
         program: "Business Administration",
@@ -83,6 +131,21 @@ serve(async (req) => {
         tuitionInternational: 45000,
         placementRate: 0.94,
         averageIncome: 85000,
+        programDuration: "4 years",
+      },
+      {
+        name: "University of Toronto",
+        logo: "https://upload.wikimedia.org/wikipedia/en/thumb/9/9a/University_of_Toronto_seal.svg/1200px-University_of_Toronto_seal.svg.png",
+        program: "Computer Science",
+        programType: "degree",
+        website: "https://www.utoronto.ca",
+        province: "on",
+        admissionGPA: 3.9,
+        admissionRate: 0.40,
+        tuitionDomestic: 7200,
+        tuitionInternational: 48000,
+        placementRate: 0.95,
+        averageIncome: 90000,
         programDuration: "4 years",
       },
       {
@@ -101,6 +164,38 @@ serve(async (req) => {
         programDuration: "1 year",
       },
       {
+        name: "Algonquin College",
+        logo: "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a5/Algonquin_College.svg/1200px-Algonquin_College.svg.png",
+        program: "Business Marketing",
+        programType: "diploma",
+        website: "https://www.algonquincollege.com",
+        province: "on",
+        admissionGPA: 2.8,
+        admissionRate: 0.80,
+        tuitionDomestic: 2200,
+        tuitionInternational: 15000,
+        placementRate: 0.85,
+        averageIncome: 55000,
+        programDuration: "2 years",
+      },
+      {
+        name: "Seneca College",
+        logo: "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a7/Seneca_College_logo.svg/1200px-Seneca_College_logo.svg.png",
+        program: "Computer Programming",
+        programType: "diploma",
+        website: "https://www.senecacollege.ca",
+        province: "on",
+        admissionGPA: 3.1,
+        admissionRate: 0.70,
+        tuitionDomestic: 2500,
+        tuitionInternational: 16000,
+        placementRate: 0.88,
+        averageIncome: 65000,
+        programDuration: "2 years",
+      },
+
+      // Quebec Schools
+      {
         name: "McGill University",
         logo: "https://upload.wikimedia.org/wikipedia/en/thumb/2/29/McGill_University_CoA.svg/1200px-McGill_University_CoA.svg.png",
         program: "Engineering",
@@ -116,6 +211,38 @@ serve(async (req) => {
         programDuration: "4 years",
       },
       {
+        name: "McGill University",
+        logo: "https://upload.wikimedia.org/wikipedia/en/thumb/2/29/McGill_University_CoA.svg/1200px-McGill_University_CoA.svg.png",
+        program: "Business Management",
+        programType: "degree",
+        website: "https://www.mcgill.ca",
+        province: "qc",
+        admissionGPA: 3.5,
+        admissionRate: 0.50,
+        tuitionDomestic: 4300,
+        tuitionInternational: 36000,
+        placementRate: 0.92,
+        averageIncome: 80000,
+        programDuration: "4 years",
+      },
+      {
+        name: "Concordia University",
+        logo: "https://upload.wikimedia.org/wikipedia/commons/thumb/0/0a/Concordia_University_logo.svg/1200px-Concordia_University_logo.svg.png",
+        program: "Business Administration",
+        programType: "degree",
+        website: "https://www.concordia.ca",
+        province: "qc",
+        admissionGPA: 3.2,
+        admissionRate: 0.65,
+        tuitionDomestic: 4000,
+        tuitionInternational: 30000,
+        placementRate: 0.85,
+        averageIncome: 72000,
+        programDuration: "4 years",
+      },
+
+      // Alberta Schools
+      {
         name: "University of Alberta",
         logo: "https://upload.wikimedia.org/wikipedia/commons/thumb/9/96/University_of_Alberta_seal.svg/1200px-University_of_Alberta_seal.svg.png",
         program: "Education",
@@ -128,6 +255,117 @@ serve(async (req) => {
         tuitionInternational: 29000,
         placementRate: 0.85,
         averageIncome: 65000,
+        programDuration: "4 years",
+      },
+      {
+        name: "University of Alberta",
+        logo: "https://upload.wikimedia.org/wikipedia/commons/thumb/9/96/University_of_Alberta_seal.svg/1200px-University_of_Alberta_seal.svg.png",
+        program: "Computer Science",
+        programType: "degree",
+        website: "https://www.ualberta.ca",
+        province: "ab",
+        admissionGPA: 3.5,
+        admissionRate: 0.60,
+        tuitionDomestic: 5400,
+        tuitionInternational: 30000,
+        placementRate: 0.87,
+        averageIncome: 78000,
+        programDuration: "4 years",
+      },
+      {
+        name: "NAIT",
+        logo: "https://upload.wikimedia.org/wikipedia/commons/thumb/d/df/Northern_Alberta_Institute_of_Technology_Logo.svg/1200px-Northern_Alberta_Institute_of_Technology_Logo.svg.png",
+        program: "Digital Media and IT",
+        programType: "diploma",
+        website: "https://www.nait.ca",
+        province: "ab",
+        admissionGPA: 2.9,
+        admissionRate: 0.75,
+        tuitionDomestic: 3200,
+        tuitionInternational: 16000,
+        placementRate: 0.88,
+        averageIncome: 60000,
+        programDuration: "2 years",
+      },
+
+      // Manitoba Schools
+      {
+        name: "University of Manitoba",
+        logo: "https://upload.wikimedia.org/wikipedia/commons/thumb/c/c6/University_of_Manitoba_logo.svg/1200px-University_of_Manitoba_logo.svg.png",
+        program: "Commerce",
+        programType: "degree",
+        website: "https://www.umanitoba.ca",
+        province: "mb",
+        admissionGPA: 3.2,
+        admissionRate: 0.68,
+        tuitionDomestic: 4800,
+        tuitionInternational: 25000,
+        placementRate: 0.84,
+        averageIncome: 70000,
+        programDuration: "4 years",
+      },
+      {
+        name: "Red River College",
+        logo: "https://upload.wikimedia.org/wikipedia/commons/thumb/2/29/Red_River_College_Polytechnic_Logo.svg/1200px-Red_River_College_Polytechnic_Logo.svg.png",
+        program: "IT Management",
+        programType: "diploma",
+        website: "https://www.rrc.ca",
+        province: "mb",
+        admissionGPA: 3.0,
+        admissionRate: 0.72,
+        tuitionDomestic: 3800,
+        tuitionInternational: 15000,
+        placementRate: 0.86,
+        averageIncome: 62000,
+        programDuration: "2 years",
+      },
+
+      // Saskatchewan Schools
+      {
+        name: "University of Saskatchewan",
+        logo: "https://upload.wikimedia.org/wikipedia/en/thumb/b/b5/University_of_Saskatchewan_shield.svg/1200px-University_of_Saskatchewan_shield.svg.png",
+        program: "Agriculture",
+        programType: "degree",
+        website: "https://www.usask.ca",
+        province: "sk",
+        admissionGPA: 3.3,
+        admissionRate: 0.65,
+        tuitionDomestic: 4800,
+        tuitionInternational: 25000,
+        placementRate: 0.88,
+        averageIncome: 68000,
+        programDuration: "4 years",
+      },
+      {
+        name: "Saskatchewan Polytechnic",
+        logo: "https://upload.wikimedia.org/wikipedia/en/thumb/f/f8/Saskatchewan_Polytechnic_logo.svg/1200px-Saskatchewan_Polytechnic_logo.svg.png",
+        program: "Business Certificate",
+        programType: "certificate",
+        website: "https://saskpolytech.ca",
+        province: "sk",
+        admissionGPA: 2.7,
+        admissionRate: 0.82,
+        tuitionDomestic: 1900,
+        tuitionInternational: 12000,
+        placementRate: 0.80,
+        averageIncome: 53000,
+        programDuration: "1 year",
+      },
+
+      // Maritimes Schools
+      {
+        name: "Dalhousie University",
+        logo: "https://upload.wikimedia.org/wikipedia/commons/thumb/e/e5/Dal_Logo.svg/1200px-Dal_Logo.svg.png",
+        program: "Computer Science",
+        programType: "degree",
+        website: "https://www.dal.ca",
+        province: "mt",
+        admissionGPA: 3.5,
+        admissionRate: 0.60,
+        tuitionDomestic: 5200,
+        tuitionInternational: 28000,
+        placementRate: 0.88,
+        averageIncome: 76000,
         programDuration: "4 years",
       },
       {
@@ -146,63 +384,50 @@ serve(async (req) => {
         programDuration: "2 years",
       },
       {
-        name: "University of Saskatchewan",
-        logo: "https://upload.wikimedia.org/wikipedia/en/thumb/b/b5/University_of_Saskatchewan_shield.svg/1200px-University_of_Saskatchewan_shield.svg.png",
-        program: "Agriculture",
+        name: "Saint Mary's University",
+        logo: "https://upload.wikimedia.org/wikipedia/en/thumb/0/05/Saint_Mary%27s_University_%28Halifax%29_Logo.svg/1200px-Saint_Mary%27s_University_%28Halifax%29_Logo.svg.png",
+        program: "Business Administration",
         programType: "degree",
-        website: "https://www.usask.ca",
-        province: "sk",
-        admissionGPA: 3.3,
-        admissionRate: 0.65,
-        tuitionDomestic: 4800,
-        tuitionInternational: 25000,
-        placementRate: 0.88,
+        website: "https://www.smu.ca",
+        province: "mt",
+        admissionGPA: 3.0,
+        admissionRate: 0.70,
+        tuitionDomestic: 4900,
+        tuitionInternational: 20000,
+        placementRate: 0.82,
+        averageIncome: 65000,
+        programDuration: "4 years",
+      },
+
+      // Remote Learning Options
+      {
+        name: "Athabasca University",
+        logo: "https://upload.wikimedia.org/wikipedia/commons/thumb/4/4f/Athabasca_University_logo.svg/1200px-Athabasca_University_logo.svg.png",
+        program: "Business Administration",
+        programType: "degree",
+        website: "https://www.athabascau.ca",
+        province: "remote",
+        admissionGPA: 2.8,
+        admissionRate: 0.85,
+        tuitionDomestic: 3900,
+        tuitionInternational: 3900,
+        placementRate: 0.82,
         averageIncome: 68000,
         programDuration: "4 years",
       },
       {
-        name: "Red River College",
-        logo: "https://upload.wikimedia.org/wikipedia/commons/thumb/2/29/Red_River_College_Polytechnic_Logo.svg/1200px-Red_River_College_Polytechnic_Logo.svg.png",
-        program: "IT Management",
-        programType: "diploma",
-        website: "https://www.rrc.ca",
-        province: "mb",
-        admissionGPA: 3.0,
-        admissionRate: 0.72,
-        tuitionDomestic: 3800,
-        tuitionInternational: 15000,
-        placementRate: 0.86,
-        averageIncome: 62000,
-        programDuration: "2 years",
-      },
-      {
-        name: "Centennial College",
-        logo: "https://upload.wikimedia.org/wikipedia/en/thumb/a/a3/Centennial_College_logo.svg/1200px-Centennial_College_logo.svg.png",
-        program: "Culinary Management",
-        programType: "certificate",
-        website: "https://www.centennialcollege.ca",
-        province: "on",
-        admissionGPA: 2.8,
-        admissionRate: 0.80,
-        tuitionDomestic: 1900,
-        tuitionInternational: 13000,
-        placementRate: 0.80,
-        averageIncome: 52000,
-        programDuration: "1 year",
-      },
-      {
-        name: "Remote Learning Institute",
-        logo: "https://cdn-icons-png.flaticon.com/512/1995/1995515.png",
+        name: "CDI College",
+        logo: "https://upload.wikimedia.org/wikipedia/en/thumb/5/57/CDI_College_logo.svg/1200px-CDI_College_logo.svg.png",
         program: "Web Development",
         programType: "certificate",
-        website: "https://www.remotelearning.edu",
+        website: "https://www.cdicollege.ca",
         province: "remote",
-        admissionGPA: 3.0,
-        admissionRate: 0.90,
-        tuitionDomestic: 1500,
-        tuitionInternational: 1500,
-        placementRate: 0.84,
-        averageIncome: 59000,
+        admissionGPA: 2.6,
+        admissionRate: 0.88,
+        tuitionDomestic: 1800,
+        tuitionInternational: 1800,
+        placementRate: 0.80,
+        averageIncome: 55000,
         programDuration: "6 months",
       }
     ];
@@ -211,13 +436,13 @@ serve(async (req) => {
     const getRelatedPrograms = (field: string): string[] => {
       switch (field) {
         case "business":
-          return ["Business", "Commerce", "Finance", "Marketing", "Management", "Business Administration"];
+          return ["Business", "Commerce", "Finance", "Marketing", "Management", "Business Administration", "Business Management", "Business Marketing"];
         case "computer-science":
-          return ["Computer Science", "Software", "IT", "Computing", "Web Development", "Data Science", "Software Development"];
+          return ["Computer Science", "Software", "IT", "Computing", "Web Development", "Data Science", "Software Development", "Digital Media and IT", "Computer Programming", "IT Management"];
         case "engineering":
           return ["Engineering", "Civil", "Mechanical", "Electrical", "Chemical"];
         case "medicine":
-          return ["Medicine", "Health", "Nursing", "Pharmacy", "Medical"];
+          return ["Medicine", "Health", "Nursing", "Pharmacy", "Medical", "Health Sciences"];
         case "arts":
           return ["Arts", "Humanities", "Design", "Fine Arts", "Music", "Digital Media"];
         case "education":
@@ -227,7 +452,7 @@ serve(async (req) => {
         case "agriculture":
           return ["Agriculture", "Farming", "Agribusiness"];
         case "culinary":
-          return ["Culinary", "Food", "Cooking", "Culinary Management"];
+          return ["Culinary", "Food", "Cooking", "Culinary Arts", "Culinary Management"];
         default:
           return [];
       }
@@ -285,6 +510,25 @@ serve(async (req) => {
     }
 
     console.log(`Found ${filteredSchools.length} schools matching criteria`);
+
+    // If no exact matches, provide some results anyway for better user experience
+    if (filteredSchools.length === 0) {
+      let relaxedFilters = [...schools];
+      
+      // Only retain the most important filter (field of study) and ignore others
+      if (fieldOfStudy && fieldOfStudy !== "any") {
+        const relatedPrograms = getRelatedPrograms(fieldOfStudy);
+        relaxedFilters = relaxedFilters.filter(school => 
+          relatedPrograms.length === 0 || relatedPrograms.some(program => 
+            school.program.toLowerCase().includes(program.toLowerCase())
+          )
+        );
+      }
+      
+      // Take at most 5 schools from relaxed filter
+      filteredSchools = relaxedFilters.slice(0, 5);
+      console.log(`No exact matches, providing ${filteredSchools.length} relaxed matches instead`);
+    }
     
     return new Response(
       JSON.stringify({ schools: filteredSchools }),
