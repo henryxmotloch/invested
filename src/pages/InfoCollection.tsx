@@ -26,7 +26,10 @@ const InfoCollection = () => {
   const [programType, setProgramType] = useState("");
   const [fieldOfStudy, setFieldOfStudy] = useState("");
 
-  if (!state?.name) {
+  console.log("InfoCollection state received:", state);
+
+  if (!state?.name || !state?.userId) {
+    console.warn("Missing required state data, redirecting to home");
     return <Navigate to="/" replace />;
   }
 
@@ -34,6 +37,28 @@ const InfoCollection = () => {
     e.preventDefault();
     
     try {
+      // Update user preferences in database
+      const response = await fetch("https://ypiokkuwqqmytxthcunp.supabase.co/functions/v1/save-user-info", {
+        method: "POST",
+        headers: { 
+          "Content-Type": "application/json",
+          "Authorization": `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InlwaW9ra3V3cXFteXR4dGhjdW5wIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDA1MDkzNDEsImV4cCI6MjA1NjA4NTM0MX0.zZEou6YV13cRe0mqo44MtRM6wVVy6CNLQJmEHrLCe00`
+        },
+        body: JSON.stringify({
+          userId: state.userId,
+          name: state.name,
+          location: location_,
+          budget,
+          fieldOfStudy,
+          programType
+        }),
+      });
+      
+      if (!response.ok) {
+        const text = await response.text();
+        throw new Error(text || "Failed to save preferences");
+      }
+      
       // Navigate directly to clipboard page with user preferences
       navigate("/clipboard", { 
         state: { 

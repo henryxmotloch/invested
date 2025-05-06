@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { DollarSign, ChartBar, PiggyBank } from "lucide-react";
@@ -57,6 +56,7 @@ const Index = () => {
       
       toast.success("Welcome to InvestEd!");
       
+      // Make sure we properly redirect to info-collection with the necessary user data
       navigate("/info-collection", { 
         state: { 
           name,
