@@ -9,9 +9,9 @@ import InfoCollection from "./pages/InfoCollection";
 import NotFound from "./pages/NotFound";
 import Clipboard from "./pages/Clipboard";
 import Cart from "./pages/Cart";
+import PaymentOption from "./pages/PaymentOption";
 import Checkout from "./pages/Checkout";
 import Success from "./pages/Success";
-import PaymentOption from "./pages/PaymentOption";
 
 const queryClient = new QueryClient();
 
@@ -19,9 +19,9 @@ const AppRoutes = () => (
   <Routes>
     <Route path="/" element={<Index />} />
     <Route path="/info-collection" element={<InfoCollection />} />
-    <Route path="/payment-option" element={<PaymentOption />} />
     <Route path="/clipboard" element={<Clipboard />} />
     <Route path="/cart" element={<Cart />} />
+    <Route path="/payment-option" element={<PaymentOption />} />
     <Route path="/checkout" element={<Checkout />} />
     <Route path="/success" element={<Success />} />
     <Route path="*" element={<NotFound />} />

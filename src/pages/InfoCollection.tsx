@@ -34,8 +34,8 @@ const InfoCollection = () => {
     e.preventDefault();
     
     try {
-      // Navigate to payment options, passing along the selected options
-      navigate("/payment-option", { 
+      // Navigate directly to clipboard page with user preferences
+      navigate("/clipboard", { 
         state: { 
           name: state.name,
           userId: state.userId,
