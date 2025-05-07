@@ -1,3 +1,4 @@
+
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { DollarSign, ChartBar, PiggyBank } from "lucide-react";
@@ -7,6 +8,7 @@ import { toast } from "sonner";
 
 const Index = () => {
   const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
@@ -24,7 +26,7 @@ const Index = () => {
       // Generate a unique user ID based on timestamp
       const userId = Date.now().toString();
       
-      console.log("Submitting user data:", { name, userId });
+      console.log("Submitting user data:", { name, email, userId });
       
       // Call our Edge Function to save the user data
       const response = await fetch("https://ypiokkuwqqmytxthcunp.supabase.co/functions/v1/save-user-info", {
@@ -34,7 +36,7 @@ const Index = () => {
           // Include Supabase anon key for authorization
           "Authorization": `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InlwaW9ra3V3cXFteXR4dGhjdW5wIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDA1MDkzNDEsImV4cCI6MjA1NjA4NTM0MX0.zZEou6YV13cRe0mqo44MtRM6wVVy6CNLQJmEHrLCe00`
         },
-        body: JSON.stringify({ name, userId }),
+        body: JSON.stringify({ name, email, userId }),
       });
       
       const responseText = await response.text();
@@ -106,6 +108,16 @@ const Index = () => {
                   value={name}
                   onChange={(e) => setName(e.target.value)}
                   required
+                  disabled={loading}
+                />
+              </div>
+              <div>
+                <Input
+                  type="email"
+                  placeholder="Your Email"
+                  className="bg-white/20 border-white/20 text-white placeholder:text-white/60"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
                   disabled={loading}
                 />
               </div>

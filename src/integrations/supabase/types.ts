@@ -175,6 +175,7 @@ export type Database = {
         Row: {
           "Budget Range": string | null
           "Display name": string | null
+          Email: string | null
           "Field of Study": string | null
           "Preferred Campus Location": string | null
           "User ID": string
@@ -182,6 +183,7 @@ export type Database = {
         Insert: {
           "Budget Range"?: string | null
           "Display name"?: string | null
+          Email?: string | null
           "Field of Study"?: string | null
           "Preferred Campus Location"?: string | null
           "User ID": string
@@ -189,6 +191,7 @@ export type Database = {
         Update: {
           "Budget Range"?: string | null
           "Display name"?: string | null
+          Email?: string | null
           "Field of Study"?: string | null
           "Preferred Campus Location"?: string | null
           "User ID"?: string
