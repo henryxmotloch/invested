@@ -23,9 +23,11 @@ serve(async (req) => {
     const { 
       name, 
       userId, 
+      email = null,  // Add email here with default value
       location = null, 
       budget = null, 
       fieldOfStudy = null, 
+      programType = null,  // Add programType here
       duration = null, 
       paymentOption = null
     } = await req.json();
@@ -37,7 +39,7 @@ serve(async (req) => {
       );
     }
 
-    console.log("Saving user data:", { name, userId, location, budget, fieldOfStudy, duration, paymentOption });
+    console.log("Saving user data:", { name, userId, email, location, budget, fieldOfStudy, programType, duration, paymentOption });
     
     // First, let's log all available columns to help with debugging
     const { data: tableInfo, error: tableError } = await supabaseAdmin
@@ -69,9 +71,11 @@ serve(async (req) => {
       };
       
       // Only add fields if they have values
+      if (email !== null) updateData["Email"] = email;
       if (location !== null) updateData["Preferred Campus Location"] = location;
       if (budget !== null) updateData["Budget Range"] = budget;
       if (fieldOfStudy !== null) updateData["Field of Study"] = fieldOfStudy;
+      if (programType !== null) updateData["Program Type"] = programType;
       if (duration !== null) updateData["Study Duration"] = duration;
       if (paymentOption !== null) updateData["Payment Option"] = paymentOption;
       
@@ -98,9 +102,11 @@ serve(async (req) => {
       };
       
       // Only add fields if they have values
+      if (email !== null) insertData["Email"] = email;
       if (location !== null) insertData["Preferred Campus Location"] = location;
       if (budget !== null) insertData["Budget Range"] = budget;
       if (fieldOfStudy !== null) insertData["Field of Study"] = fieldOfStudy;
+      if (programType !== null) insertData["Program Type"] = programType;
       if (duration !== null) insertData["Study Duration"] = duration;
       if (paymentOption !== null) insertData["Payment Option"] = paymentOption;
       

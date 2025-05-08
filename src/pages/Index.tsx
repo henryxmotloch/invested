@@ -62,6 +62,7 @@ const Index = () => {
       navigate("/info-collection", { 
         state: { 
           name,
+          email,  // Pass email to the info collection page
           userId
         }
       });

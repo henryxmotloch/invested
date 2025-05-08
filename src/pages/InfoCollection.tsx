@@ -14,6 +14,7 @@ import { toast } from "sonner";
 
 interface LocationState {
   name: string;
+  email?: string; // Make email optional since older links might not have it
   userId: string;
 }
 
@@ -47,6 +48,7 @@ const InfoCollection = () => {
         body: JSON.stringify({
           userId: state.userId,
           name: state.name,
+          email: state.email, // Include email from state
           location: location_,
           budget,
           fieldOfStudy,

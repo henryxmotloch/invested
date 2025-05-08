@@ -178,6 +178,7 @@ export type Database = {
           Email: string | null
           "Field of Study": string | null
           "Preferred Campus Location": string | null
+          "Program Type:": string | null
           "User ID": string
         }
         Insert: {
@@ -186,6 +187,7 @@ export type Database = {
           Email?: string | null
           "Field of Study"?: string | null
           "Preferred Campus Location"?: string | null
+          "Program Type:"?: string | null
           "User ID": string
         }
         Update: {
@@ -194,6 +196,7 @@ export type Database = {
           Email?: string | null
           "Field of Study"?: string | null
           "Preferred Campus Location"?: string | null
+          "Program Type:"?: string | null
           "User ID"?: string
         }
         Relationships: []
