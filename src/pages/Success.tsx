@@ -1,12 +1,8 @@
 
 import { Card } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
 import { Check } from "lucide-react";
-import { useNavigate } from "react-router-dom";
 
 const Success = () => {
-  const navigate = useNavigate();
-
   return (
     <div className="min-h-screen bg-gradient-to-b from-secondary to-secondary/95 text-secondary-foreground">
       <div className="container mx-auto px-4 py-12">
@@ -20,12 +16,6 @@ const Success = () => {
           <p className="text-lg text-muted-foreground mb-8">
             Thank you for your purchase. You now have access to InvestEd Compass Premium.
           </p>
-          <Button 
-            className="w-full md:w-auto"
-            onClick={() => navigate("/dashboard")}
-          >
-            Go to Dashboard
-          </Button>
         </Card>
       </div>
     </div>
