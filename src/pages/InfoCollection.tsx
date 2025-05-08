@@ -9,7 +9,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
 
@@ -17,12 +17,6 @@ interface LocationState {
   name: string;
   email?: string; // Make email optional since older links might not have it
   userId: string;
-}
-
-interface School {
-  SchoolID: string;
-  SchoolName: string;
-  Location: string;
 }
 
 const InfoCollection = () => {
@@ -33,35 +27,8 @@ const InfoCollection = () => {
   const [budget, setBudget] = useState("");
   const [programType, setProgramType] = useState("");
   const [fieldOfStudy, setFieldOfStudy] = useState("");
-  const [selectedSchool, setSelectedSchool] = useState("");
-  const [schools, setSchools] = useState<School[]>([]);
-  const [loadingSchools, setLoadingSchools] = useState(false);
 
   console.log("InfoCollection state received:", state);
-
-  useEffect(() => {
-    const fetchSchools = async () => {
-      setLoadingSchools(true);
-      try {
-        const { data, error } = await supabase
-          .from("School")
-          .select("SchoolID, SchoolName, Location")
-          .limit(10);
-          
-        if (error) {
-          console.error("Error fetching schools:", error);
-        } else if (data) {
-          setSchools(data);
-        }
-      } catch (err) {
-        console.error("Error:", err);
-      } finally {
-        setLoadingSchools(false);
-      }
-    };
-    
-    fetchSchools();
-  }, []);
 
   if (!state?.name || !state?.userId) {
     console.warn("Missing required state data, redirecting to home");
@@ -86,8 +53,7 @@ const InfoCollection = () => {
           location: location_,
           budget,
           fieldOfStudy,
-          programType,
-          selectedSchoolId: selectedSchool
+          programType
         }),
       });
       
@@ -105,8 +71,7 @@ const InfoCollection = () => {
           location: location_,
           budget,
           fieldOfStudy,
-          programType,
-          selectedSchoolId: selectedSchool
+          programType
         } 
       });
     } catch (error) {
@@ -194,28 +159,6 @@ const InfoCollection = () => {
                   <SelectItem value="certificate">Certificate</SelectItem>
                   <SelectItem value="diploma">Diploma</SelectItem>
                   <SelectItem value="degree">Degree</SelectItem>
-                </SelectContent>
-              </Select>
-            </div>
-
-            <div className="space-y-2">
-              <label className="text-lg font-medium">Select a School:</label>
-              <Select value={selectedSchool} onValueChange={setSelectedSchool}>
-                <SelectTrigger className="w-full bg-white/40 border-white/20">
-                  <SelectValue placeholder="Select a school..." />
-                </SelectTrigger>
-                <SelectContent className="bg-white border-white/20">
-                  {loadingSchools ? (
-                    <SelectItem value="loading">Loading schools...</SelectItem>
-                  ) : schools.length > 0 ? (
-                    schools.map(school => (
-                      <SelectItem key={school.SchoolID} value={school.SchoolID}>
-                        {school.SchoolName} ({school.Location})
-                      </SelectItem>
-                    ))
-                  ) : (
-                    <SelectItem value="none">No schools available</SelectItem>
-                  )}
                 </SelectContent>
               </Select>
             </div>
