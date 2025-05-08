@@ -19,9 +19,13 @@ const Checkout = () => {
     try {
       // Create subscription record in the database
       if (userId) {
+        // Generate a unique subscription ID
+        const subscriptionId = `sub-${userId}-${Date.now()}`;
+        
         const { data, error } = await supabase
           .from("Subscription")
           .insert({
+            "SubscriptionID": subscriptionId, // Add the required SubscriptionID
             "CustomerID": userId,
             "PlanID": "premium-plan", // Default to premium plan
             "Status": "active",
@@ -43,10 +47,12 @@ const Checkout = () => {
 
       // Create a demo report for the user using the existing Report table
       if (userId) {
+        const reportId = `report-${userId}-${Date.now()}`;
+        
         const { data, error } = await supabase
           .from("Report")
           .insert({
-            "ReportID": `report-${userId}-${Date.now()}`,
+            "ReportID": reportId,
             "ReportName": "Investment Education ROI Analysis",
             "Description": "Personalized analysis of return on investment for education",
             "AccessLevel": "premium",
@@ -65,7 +71,7 @@ const Checkout = () => {
             .insert({
               "PurchaseID": `purchase-${userId}-${Date.now()}`,
               "CustomerID": userId,
-              "ReportID": `report-${userId}-${Date.now()}`,
+              "ReportID": reportId,
               "PurchaseDate": new Date().toISOString(),
               "TransactionID": `tx-${Date.now()}`
             });
