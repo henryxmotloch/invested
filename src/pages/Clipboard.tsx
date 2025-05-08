@@ -102,6 +102,7 @@ const Clipboard = () => {
   const userBudget = state?.budget || "any";
   const userProgramType = state?.programType || "any";
   const userField = state?.fieldOfStudy || "any";
+  const userPaymentOption = state?.paymentOption || "";
 
   // Function to search for schools
   const searchSchools = async () => {
@@ -130,7 +131,21 @@ const Clipboard = () => {
       }
       
       console.log("Search results:", data);
-      setSchools(data.schools || []);
+      
+      // Process the returned schools to map database fields to SchoolInfo
+      const processedSchools = data.schools?.map((school: any) => {
+        return {
+          ...school,
+          // Map any new database fields to our SchoolInfo interface
+          imageURL: school.imageURL || school.logo,
+          worldRanking: school.worldRanking,
+          graduateEmployabilityScore: school.graduateEmployabilityScore,
+          entranceDifficulty: school.entranceDifficulty,
+          institutionType: school.institutionType
+        };
+      }) || [];
+      
+      setSchools(processedSchools);
     } catch (error) {
       console.error("Error searching schools:", error);
       setSearchError(error instanceof Error ? error.message : "An unknown error occurred");
