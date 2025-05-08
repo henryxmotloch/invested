@@ -6,6 +6,7 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Index from "./pages/Index";
 import InfoCollection from "./pages/InfoCollection";
+import PaymentOption from "./pages/PaymentOption";
 import NotFound from "./pages/NotFound";
 import Clipboard from "./pages/Clipboard";
 import Cart from "./pages/Cart";
@@ -18,6 +19,7 @@ const AppRoutes = () => (
   <Routes>
     <Route path="/" element={<Index />} />
     <Route path="/info-collection" element={<InfoCollection />} />
+    <Route path="/payment-option" element={<PaymentOption />} />
     <Route path="/clipboard" element={<Clipboard />} />
     <Route path="/cart" element={<Cart />} />
     <Route path="/checkout" element={<Checkout />} />

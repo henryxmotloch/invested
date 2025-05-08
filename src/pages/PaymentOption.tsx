@@ -17,8 +17,8 @@ interface LocationState {
   userId: string;
   location: string;
   budget: string;
-  duration: string;
   fieldOfStudy: string;
+  programType: string;
   email?: string;
 }
 
@@ -57,13 +57,13 @@ const PaymentOption = () => {
           "Authorization": `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InlwaW9ra3V3cXFteXR4dGhjdW5wIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDA1MDkzNDEsImV4cCI6MjA1NjA4NTM0MX0.zZEou6YV13cRe0mqo44MtRM6wVVy6CNLQJmEHrLCe00`
         },
         body: JSON.stringify({ 
-          name: state.name,
           userId: state.userId,
+          name: state.name,
           email: state.email,
           location: state.location,
           budget: state.budget,
-          duration: state.duration,
           fieldOfStudy: state.fieldOfStudy,
+          programType: state.programType,
           paymentOption
         }),
       });
@@ -85,8 +85,8 @@ const PaymentOption = () => {
       
       console.log("Payment info updated successfully:", data);
       
-      // Now navigate to checkout instead of clipboard
-      navigate("/cart", { 
+      // Navigate to clipboard page with all the user info
+      navigate("/clipboard", { 
         state: { 
           ...state,
           paymentOption,
