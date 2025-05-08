@@ -23,13 +23,14 @@ serve(async (req) => {
     const { 
       name, 
       userId, 
-      email = null,  // Add email here with default value
+      email = null,
       location = null, 
       budget = null, 
       fieldOfStudy = null, 
-      programType = null,  // Add programType here
+      programType = null,
       duration = null, 
-      paymentOption = null
+      paymentOption = null,
+      selectedSchoolId = null
     } = await req.json();
     
     if (!name || !userId) {
@@ -39,7 +40,7 @@ serve(async (req) => {
       );
     }
 
-    console.log("Saving user data:", { name, userId, email, location, budget, fieldOfStudy, programType, duration, paymentOption });
+    console.log("Saving user data:", { name, userId, email, location, budget, fieldOfStudy, programType, duration, paymentOption, selectedSchoolId });
     
     // First, let's log all available columns to help with debugging
     const { data: tableInfo, error: tableError } = await supabaseAdmin
@@ -78,6 +79,7 @@ serve(async (req) => {
       if (programType !== null) updateData["Program Type"] = programType;
       if (duration !== null) updateData["Study Duration"] = duration;
       if (paymentOption !== null) updateData["Payment Option"] = paymentOption;
+      if (selectedSchoolId !== null) updateData["Selected School ID"] = selectedSchoolId;
       
       console.log("Updating user with data:", updateData);
       
@@ -109,6 +111,7 @@ serve(async (req) => {
       if (programType !== null) insertData["Program Type"] = programType;
       if (duration !== null) insertData["Study Duration"] = duration;
       if (paymentOption !== null) insertData["Payment Option"] = paymentOption;
+      if (selectedSchoolId !== null) insertData["Selected School ID"] = selectedSchoolId;
       
       console.log("Inserting new user with data:", insertData);
       

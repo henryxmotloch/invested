@@ -1,10 +1,12 @@
 
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 
 const Cart = () => {
   const navigate = useNavigate();
+  const location = useLocation();
+  const { userId, paymentOption } = location.state || {};
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-secondary to-secondary/95 text-secondary-foreground">
@@ -16,6 +18,18 @@ const Cart = () => {
             <div className="p-4 rounded-lg bg-white/5">
               <h3 className="text-xl font-semibold">InvestEd Compass Premium</h3>
               <p className="text-lg text-muted-foreground mt-2">Price: $49.99</p>
+              
+              {paymentOption && (
+                <div className="mt-4 p-3 bg-white/10 rounded">
+                  <p className="text-sm font-medium">
+                    Payment Method: {paymentOption === 'upfront' ? 'Pay Upfront' : 
+                                    paymentOption === 'installments' ? 'Monthly Installments' : 
+                                    paymentOption === 'student-loan' ? 'Student Loan' : 
+                                    paymentOption === 'scholarship' ? 'Scholarship' : 
+                                    paymentOption === 'employer' ? 'Employer Sponsored' : 'Standard'}
+                  </p>
+                </div>
+              )}
             </div>
 
             <div className="border-t border-white/10 pt-6">
@@ -27,7 +41,12 @@ const Cart = () => {
 
             <Button 
               className="w-full md:w-auto mt-6"
-              onClick={() => navigate("/checkout")}
+              onClick={() => navigate("/checkout", { 
+                state: { 
+                  userId, 
+                  paymentOption 
+                }
+              })}
             >
               Proceed to Checkout
             </Button>

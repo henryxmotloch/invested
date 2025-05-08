@@ -19,6 +19,7 @@ interface LocationState {
   budget: string;
   duration: string;
   fieldOfStudy: string;
+  email?: string;
 }
 
 const PaymentOption = () => {
@@ -58,6 +59,7 @@ const PaymentOption = () => {
         body: JSON.stringify({ 
           name: state.name,
           userId: state.userId,
+          email: state.email,
           location: state.location,
           budget: state.budget,
           duration: state.duration,
@@ -83,10 +85,12 @@ const PaymentOption = () => {
       
       console.log("Payment info updated successfully:", data);
       
-      navigate("/clipboard", { 
+      // Now navigate to checkout instead of clipboard
+      navigate("/cart", { 
         state: { 
           ...state,
-          paymentOption
+          paymentOption,
+          userId: state.userId
         } 
       });
     } catch (error) {
