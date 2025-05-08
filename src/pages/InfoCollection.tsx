@@ -27,6 +27,8 @@ const InfoCollection = () => {
   const [budget, setBudget] = useState("");
   const [programType, setProgramType] = useState("");
   const [fieldOfStudy, setFieldOfStudy] = useState("");
+  const [paymentOption, setPaymentOption] = useState("");
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   console.log("InfoCollection state received:", state);
 
@@ -37,6 +39,13 @@ const InfoCollection = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    
+    if (!paymentOption) {
+      toast.error("Please select a payment option");
+      return;
+    }
+    
+    setIsSubmitting(true);
     
     try {
       // Update user preferences in database
@@ -49,11 +58,12 @@ const InfoCollection = () => {
         body: JSON.stringify({
           userId: state.userId,
           name: state.name,
-          email: state.email, // Include email from state
+          email: state.email,
           location: location_,
           budget,
           fieldOfStudy,
-          programType
+          programType,
+          paymentOption
         }),
       });
       
@@ -62,8 +72,8 @@ const InfoCollection = () => {
         throw new Error(text || "Failed to save preferences");
       }
       
-      // Navigate to payment options page
-      navigate("/payment-option", { 
+      // Navigate directly to clipboard page with all the info
+      navigate("/clipboard", { 
         state: { 
           name: state.name,
           userId: state.userId,
@@ -71,12 +81,15 @@ const InfoCollection = () => {
           location: location_,
           budget,
           fieldOfStudy,
-          programType
+          programType,
+          paymentOption
         } 
       });
     } catch (error) {
       console.error('Error:', error);
       toast.error("Something went wrong. Please try again.");
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
@@ -163,8 +176,24 @@ const InfoCollection = () => {
               </Select>
             </div>
 
-            <Button type="submit" className="w-full">
-              Next
+            <div className="space-y-2 mt-8">
+              <label className="text-lg font-medium">Payment Method:</label>
+              <Select value={paymentOption} onValueChange={setPaymentOption}>
+                <SelectTrigger className="w-full bg-white/40 border-white/20">
+                  <SelectValue placeholder="Select payment option..." />
+                </SelectTrigger>
+                <SelectContent className="bg-white border-white/20">
+                  <SelectItem value="upfront">Pay Upfront</SelectItem>
+                  <SelectItem value="installments">Monthly Installments</SelectItem>
+                  <SelectItem value="student-loan">Student Loan</SelectItem>
+                  <SelectItem value="scholarship">Scholarship</SelectItem>
+                  <SelectItem value="employer">Employer Sponsored</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+
+            <Button type="submit" className="w-full" disabled={isSubmitting}>
+              {isSubmitting ? "Submitting..." : "Next"}
             </Button>
           </form>
         </Card>

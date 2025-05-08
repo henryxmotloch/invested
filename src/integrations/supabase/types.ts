@@ -177,6 +177,7 @@ export type Database = {
           "Display name": string | null
           Email: string | null
           "Field of Study": string | null
+          "Payment Option": string | null
           "Preferred Campus Location": string | null
           "Program Type": string | null
           "User ID": string
@@ -186,6 +187,7 @@ export type Database = {
           "Display name"?: string | null
           Email?: string | null
           "Field of Study"?: string | null
+          "Payment Option"?: string | null
           "Preferred Campus Location"?: string | null
           "Program Type"?: string | null
           "User ID": string
@@ -195,6 +197,7 @@ export type Database = {
           "Display name"?: string | null
           Email?: string | null
           "Field of Study"?: string | null
+          "Payment Option"?: string | null
           "Preferred Campus Location"?: string | null
           "Program Type"?: string | null
           "User ID"?: string

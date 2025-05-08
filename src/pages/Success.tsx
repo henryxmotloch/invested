@@ -1,10 +1,12 @@
 
 import { useEffect, useState } from "react";
 import { Card } from "@/components/ui/card";
-import { Check, BarChart3, BookOpen, School } from "lucide-react";
+import { Check, BarChart3, BookOpen, School, ArrowUp } from "lucide-react";
 import { useLocation } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
+import { toast } from "sonner";
 
 interface SubscriptionData {
   "SubscriptionID": string;
@@ -30,6 +32,7 @@ const Success = () => {
   const [subscription, setSubscription] = useState<SubscriptionData | null>(null);
   const [report, setReport] = useState<ReportData | null>(null);
   const [loading, setLoading] = useState(true);
+  const [selectedROITab, setSelectedROITab] = useState("overview");
 
   useEffect(() => {
     const fetchUserData = async () => {
@@ -45,6 +48,9 @@ const Success = () => {
           
         if (subData && !subError) {
           setSubscription(subData as SubscriptionData);
+          console.log("Subscription data:", subData);
+        } else {
+          console.error("Error fetching subscription:", subError);
         }
         
         // Fetch report data via the Purchase table to find reports the user has access to
@@ -66,7 +72,12 @@ const Success = () => {
             
           if (reportData && !reportError) {
             setReport(reportData as ReportData);
+            console.log("Report data:", reportData);
+          } else {
+            console.error("Error fetching report:", reportError);
           }
+        } else {
+          console.error("Error fetching purchase or no ReportID:", purchaseError);
         }
       }
       
@@ -81,6 +92,64 @@ const Success = () => {
       return new Date(dateString).toLocaleDateString();
     } catch (e) {
       return "Invalid date";
+    }
+  };
+
+  const getROIDetails = () => {
+    switch (selectedROITab) {
+      case "overview":
+        return (
+          <div className="space-y-2">
+            <div className="flex justify-between">
+              <p><span className="font-medium">Estimated ROI:</span></p>
+              <p className="text-green-500 flex items-center"><ArrowUp className="h-4 w-4 mr-1" />145%</p>
+            </div>
+            <div className="flex justify-between">
+              <p><span className="font-medium">Time to Recoup:</span></p>
+              <p>18 months</p>
+            </div>
+            <div className="flex justify-between">
+              <p><span className="font-medium">Potential Salary Increase:</span></p>
+              <p>$24,500</p>
+            </div>
+          </div>
+        );
+      case "projections":
+        return (
+          <div className="space-y-2">
+            <div className="flex justify-between">
+              <p><span className="font-medium">5-Year Projection:</span></p>
+              <p>$125,000</p>
+            </div>
+            <div className="flex justify-between">
+              <p><span className="font-medium">10-Year Projection:</span></p>
+              <p>$175,000</p>
+            </div>
+            <div className="flex justify-between">
+              <p><span className="font-medium">Career Ceiling Increase:</span></p>
+              <p className="text-green-500">+35%</p>
+            </div>
+          </div>
+        );
+      case "industry":
+        return (
+          <div className="space-y-2">
+            <div className="flex justify-between">
+              <p><span className="font-medium">Industry Growth Rate:</span></p>
+              <p className="text-green-500">12% annually</p>
+            </div>
+            <div className="flex justify-between">
+              <p><span className="font-medium">Job Openings (5yr):</span></p>
+              <p>45,000+</p>
+            </div>
+            <div className="flex justify-between">
+              <p><span className="font-medium">Mid-Career Switch Ease:</span></p>
+              <p>High</p>
+            </div>
+          </div>
+        );
+      default:
+        return null;
     }
   };
   
@@ -108,10 +177,34 @@ const Success = () => {
                 </h3>
                 {subscription ? (
                   <div className="space-y-2">
-                    <p><span className="font-medium">Plan:</span> Premium</p>
-                    <p><span className="font-medium">Status:</span> {subscription.Status}</p>
-                    <p><span className="font-medium">Start Date:</span> {getFormattedDate(subscription.StartDate)}</p>
-                    <p><span className="font-medium">Expiration:</span> {getFormattedDate(subscription.EndDate)}</p>
+                    <div className="flex justify-between">
+                      <p><span className="font-medium">Plan:</span></p>
+                      <p>Premium</p>
+                    </div>
+                    <div className="flex justify-between">
+                      <p><span className="font-medium">Status:</span></p>
+                      <p>{subscription.Status}</p>
+                    </div>
+                    <div className="flex justify-between">
+                      <p><span className="font-medium">Start Date:</span></p>
+                      <p>{getFormattedDate(subscription.StartDate)}</p>
+                    </div>
+                    <div className="flex justify-between">
+                      <p><span className="font-medium">Expiration:</span></p>
+                      <p>{getFormattedDate(subscription.EndDate)}</p>
+                    </div>
+                    <div className="flex justify-between">
+                      <p><span className="font-medium">Billing Frequency:</span></p>
+                      <p>Monthly</p>
+                    </div>
+                    <div className="flex justify-between">
+                      <p><span className="font-medium">Next Billing:</span></p>
+                      <p>{getFormattedDate(new Date(new Date().setMonth(new Date().getMonth() + 1)).toISOString())}</p>
+                    </div>
+                    <div className="flex justify-between">
+                      <p><span className="font-medium">Payment Method:</span></p>
+                      <p>●●●● 4242</p>
+                    </div>
                   </div>
                 ) : (
                   <p>No subscription information available</p>
@@ -123,12 +216,58 @@ const Success = () => {
                   <BarChart3 className="mr-2" /> ROI Report Highlights
                 </h3>
                 {report ? (
-                  <div className="space-y-2">
-                    <p><span className="font-medium">Report:</span> {report.ReportName}</p>
-                    <p><span className="font-medium">Description:</span> {report.Description}</p>
-                    <p><span className="font-medium">Estimated ROI:</span> 145%</p>
-                    <p><span className="font-medium">Time to Recoup:</span> 18 months</p>
-                    <p><span className="font-medium">Potential Salary Increase:</span> $24,500</p>
+                  <div>
+                    <div className="mb-4">
+                      <p><span className="font-medium">Report:</span> {report.ReportName || "Education ROI Analysis"}</p>
+                      <p className="text-sm text-muted-foreground">{report.Description || "Comprehensive analysis of your educational investment return"}</p>
+                    </div>
+                    
+                    <div className="mb-4">
+                      <RadioGroup 
+                        value={selectedROITab} 
+                        onValueChange={setSelectedROITab}
+                        className="flex space-x-2 mb-4 justify-center"
+                      >
+                        <div className="flex items-center space-x-1">
+                          <RadioGroupItem value="overview" id="overview" className="sr-only" />
+                          <label 
+                            htmlFor="overview" 
+                            className={`px-3 py-1 text-sm rounded-md cursor-pointer ${selectedROITab === "overview" ? "bg-white/20" : "hover:bg-white/10"}`}
+                          >
+                            Overview
+                          </label>
+                        </div>
+                        <div className="flex items-center space-x-1">
+                          <RadioGroupItem value="projections" id="projections" className="sr-only" />
+                          <label 
+                            htmlFor="projections" 
+                            className={`px-3 py-1 text-sm rounded-md cursor-pointer ${selectedROITab === "projections" ? "bg-white/20" : "hover:bg-white/10"}`}
+                          >
+                            Projections
+                          </label>
+                        </div>
+                        <div className="flex items-center space-x-1">
+                          <RadioGroupItem value="industry" id="industry" className="sr-only" />
+                          <label 
+                            htmlFor="industry" 
+                            className={`px-3 py-1 text-sm rounded-md cursor-pointer ${selectedROITab === "industry" ? "bg-white/20" : "hover:bg-white/10"}`}
+                          >
+                            Industry
+                          </label>
+                        </div>
+                      </RadioGroup>
+                      
+                      {getROIDetails()}
+                      
+                      <div className="text-sm text-right mt-4">
+                        <button 
+                          className="text-secondary-foreground/70 hover:text-secondary-foreground underline"
+                          onClick={() => toast.success("Full report will be emailed to you within 24 hours")}
+                        >
+                          View Full Report
+                        </button>
+                      </div>
+                    </div>
                   </div>
                 ) : (
                   <p>No report data available</p>
