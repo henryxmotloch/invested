@@ -20,13 +20,13 @@ const Checkout = () => {
       // Create subscription record in the database
       if (userId) {
         const { data, error } = await supabase
-          .from("UserSubscriptions")
+          .from("Subscription")
           .insert({
-            "User ID": userId,
-            "Plan ID": "premium-plan", // Default to premium plan
+            "CustomerID": userId,
+            "PlanID": "premium-plan", // Default to premium plan
             "Status": "active",
-            "Start Date": new Date().toISOString(),
-            "End Date": new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString() // 30 days from now
+            "StartDate": new Date().toISOString(),
+            "EndDate": new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString() // 30 days from now
           });
           
         if (error) {
@@ -41,25 +41,38 @@ const Checkout = () => {
         }
       }
 
-      // Create a demo report for the user
+      // Create a demo report for the user using the existing Report table
       if (userId) {
         const { data, error } = await supabase
-          .from("UserReports")
+          .from("Report")
           .insert({
-            "User ID": userId,
-            "Report Name": "Investment Education ROI Analysis",
-            "Report Type": "financial",
-            "Data": {
-              "estimatedROI": "145%",
-              "timeToRecoup": "18 months",
-              "potentialSalaryIncrease": "$24,500"
-            }
+            "ReportID": `report-${userId}-${Date.now()}`,
+            "ReportName": "Investment Education ROI Analysis",
+            "Description": "Personalized analysis of return on investment for education",
+            "AccessLevel": "premium",
+            "PublishedDate": new Date().toISOString(),
+            "Price": 0 // Included with subscription
           });
           
         if (error) {
           console.error("Error creating report:", error);
         } else {
           console.log("Report created:", data);
+          
+          // Link this report to the user through the Purchase table
+          const { error: purchaseError } = await supabase
+            .from("Purchase")
+            .insert({
+              "PurchaseID": `purchase-${userId}-${Date.now()}`,
+              "CustomerID": userId,
+              "ReportID": `report-${userId}-${Date.now()}`,
+              "PurchaseDate": new Date().toISOString(),
+              "TransactionID": `tx-${Date.now()}`
+            });
+            
+          if (purchaseError) {
+            console.error("Error creating purchase record:", purchaseError);
+          }
         }
       }
 

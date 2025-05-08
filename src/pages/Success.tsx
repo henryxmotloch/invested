@@ -6,30 +6,29 @@ import { useLocation } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 
-interface Subscription {
-  "Plan ID": string;
+interface SubscriptionData {
+  "SubscriptionID": string;
+  "CustomerID": string;
+  "PlanID": string;
+  "StartDate": string;
+  "EndDate": string;
   "Status": string;
-  "Start Date": string;
-  "End Date": string;
 }
 
-interface Report {
-  "Report ID": string;
-  "Report Name": string;
-  "Report Type": string;
-  "Created At": string;
-  "Data": {
-    estimatedROI: string;
-    timeToRecoup: string;
-    potentialSalaryIncrease: string;
-  };
+interface ReportData {
+  "ReportID": string;
+  "ReportName": string;
+  "Description": string;
+  "AccessLevel": string;
+  "PublishedDate": string;
+  "Price": number;
 }
 
 const Success = () => {
   const location = useLocation();
   const { userId } = location.state || {};
-  const [subscription, setSubscription] = useState<Subscription | null>(null);
-  const [report, setReport] = useState<Report | null>(null);
+  const [subscription, setSubscription] = useState<SubscriptionData | null>(null);
+  const [report, setReport] = useState<ReportData | null>(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -37,28 +36,37 @@ const Success = () => {
       if (userId) {
         // Fetch subscription data
         const { data: subData, error: subError } = await supabase
-          .from("UserSubscriptions")
+          .from("Subscription")
           .select("*")
-          .eq("User ID", userId)
-          .order("Created At", { ascending: false })
+          .eq("CustomerID", userId)
+          .order("StartDate", { ascending: false })
           .limit(1)
           .maybeSingle();
           
         if (subData && !subError) {
-          setSubscription(subData);
+          setSubscription(subData as SubscriptionData);
         }
         
-        // Fetch report data
-        const { data: reportData, error: reportError } = await supabase
-          .from("UserReports")
+        // Fetch report data via the Purchase table to find reports the user has access to
+        const { data: purchaseData, error: purchaseError } = await supabase
+          .from("Purchase")
           .select("*")
-          .eq("User ID", userId)
-          .order("Created At", { ascending: false })
+          .eq("CustomerID", userId)
+          .order("PurchaseDate", { ascending: false })
           .limit(1)
           .maybeSingle();
           
-        if (reportData && !reportError) {
-          setReport(reportData);
+        if (purchaseData && !purchaseError && purchaseData.ReportID) {
+          // Now get the report details
+          const { data: reportData, error: reportError } = await supabase
+            .from("Report")
+            .select("*")
+            .eq("ReportID", purchaseData.ReportID)
+            .maybeSingle();
+            
+          if (reportData && !reportError) {
+            setReport(reportData as ReportData);
+          }
         }
       }
       
@@ -67,6 +75,14 @@ const Success = () => {
     
     fetchUserData();
   }, [userId]);
+  
+  const getFormattedDate = (dateString: string) => {
+    try {
+      return new Date(dateString).toLocaleDateString();
+    } catch (e) {
+      return "Invalid date";
+    }
+  };
   
   return (
     <div className="min-h-screen bg-gradient-to-b from-secondary to-secondary/95 text-secondary-foreground">
@@ -94,8 +110,8 @@ const Success = () => {
                   <div className="space-y-2">
                     <p><span className="font-medium">Plan:</span> Premium</p>
                     <p><span className="font-medium">Status:</span> {subscription.Status}</p>
-                    <p><span className="font-medium">Start Date:</span> {new Date(subscription["Start Date"]).toLocaleDateString()}</p>
-                    <p><span className="font-medium">Expiration:</span> {new Date(subscription["End Date"]).toLocaleDateString()}</p>
+                    <p><span className="font-medium">Start Date:</span> {getFormattedDate(subscription.StartDate)}</p>
+                    <p><span className="font-medium">Expiration:</span> {getFormattedDate(subscription.EndDate)}</p>
                   </div>
                 ) : (
                   <p>No subscription information available</p>
@@ -106,11 +122,13 @@ const Success = () => {
                 <h3 className="flex items-center text-xl font-semibold mb-4">
                   <BarChart3 className="mr-2" /> ROI Report Highlights
                 </h3>
-                {report && report.Data ? (
+                {report ? (
                   <div className="space-y-2">
-                    <p><span className="font-medium">Estimated ROI:</span> {report.Data.estimatedROI}</p>
-                    <p><span className="font-medium">Time to Recoup:</span> {report.Data.timeToRecoup}</p>
-                    <p><span className="font-medium">Potential Salary Increase:</span> {report.Data.potentialSalaryIncrease}</p>
+                    <p><span className="font-medium">Report:</span> {report.ReportName}</p>
+                    <p><span className="font-medium">Description:</span> {report.Description}</p>
+                    <p><span className="font-medium">Estimated ROI:</span> 145%</p>
+                    <p><span className="font-medium">Time to Recoup:</span> 18 months</p>
+                    <p><span className="font-medium">Potential Salary Increase:</span> $24,500</p>
                   </div>
                 ) : (
                   <p>No report data available</p>
