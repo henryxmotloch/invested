@@ -1,6 +1,6 @@
 
-import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useState, useEffect } from "react";
+import { useNavigate, useLocation } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card } from "@/components/ui/card";
@@ -13,6 +13,17 @@ const Auth = () => {
   const [loading, setLoading] = useState(false);
   const [isSignUp, setIsSignUp] = useState(false);
   const navigate = useNavigate();
+  const location = useLocation();
+  
+  // Extract referral code from URL if present
+  const referralCode = new URLSearchParams(location.search).get("ref");
+
+  useEffect(() => {
+    // Check if user came from a referral link and default to signup
+    if (referralCode) {
+      setIsSignUp(true);
+    }
+  }, [referralCode]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -21,12 +32,27 @@ const Auth = () => {
     try {
       if (isSignUp) {
         // Sign up
-        const { data, error } = await supabase.auth.signUp({
+        const { data: signUpData, error: signUpError } = await supabase.auth.signUp({
           email,
           password,
         });
 
-        if (error) throw error;
+        if (signUpError) throw signUpError;
+
+        // If we have a referral code, store the referral
+        if (referralCode && signUpData.user) {
+          const { error: referralError } = await supabase
+            .from('referrals')
+            .insert({
+              referrer_id: referralCode,
+              referred_email: email,
+            });
+          
+          if (referralError) {
+            console.error("Error storing referral:", referralError);
+            // Continue with signup even if referral tracking fails
+          }
+        }
 
         toast.success("Account created successfully! Please sign in.");
         setIsSignUp(false);
@@ -56,6 +82,13 @@ const Auth = () => {
         <h1 className="text-3xl font-bold mb-6 text-center">
           {isSignUp ? "Create Account" : "Sign In"}
         </h1>
+        {referralCode && isSignUp && (
+          <div className="mb-4 p-3 bg-primary/10 border border-primary/20 rounded-md">
+            <p className="text-sm text-center">
+              You were referred by a friend! Create an account to get started.
+            </p>
+          </div>
+        )}
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
             <Input

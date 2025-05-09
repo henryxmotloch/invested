@@ -33,6 +33,30 @@ export type Database = {
         }
         Relationships: []
       }
+      referrals: {
+        Row: {
+          created_at: string
+          id: string
+          referred_email: string
+          referrer_id: string
+          status: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          referred_email: string
+          referrer_id: string
+          status?: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          referred_email?: string
+          referrer_id?: string
+          status?: string
+        }
+        Relationships: []
+      }
       Report: {
         Row: {
           AccessLevel: string | null

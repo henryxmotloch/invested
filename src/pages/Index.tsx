@@ -1,16 +1,19 @@
 
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { DollarSign, ChartBar, PiggyBank, Calculator, TrendingUp, Briefcase } from "lucide-react";
+import { DollarSign, ChartBar, PiggyBank, Calculator, TrendingUp, Briefcase, UserPlus } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { toast } from "sonner";
+import { supabase } from "@/integrations/supabase/client";
+import { useAuth } from "@/hooks/useUserAuth";
 
 const Index = () => {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
+  const { user } = useAuth();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -74,6 +77,35 @@ const Index = () => {
     }
   };
 
+  // Navigation buttons based on authentication status
+  const renderAuthButtons = () => {
+    if (user) {
+      return (
+        <div className="flex space-x-4 animate-fadeIn">
+          <Button onClick={() => navigate("/affiliate")} variant="outline" className="flex items-center">
+            <UserPlus className="h-4 w-4 mr-2" />
+            Affiliate Program
+          </Button>
+          <Button 
+            onClick={() => supabase.auth.signOut().then(() => {
+              toast.success("Signed out successfully");
+              navigate("/");
+            })}
+            variant="secondary"
+          >
+            Sign Out
+          </Button>
+        </div>
+      );
+    }
+
+    return (
+      <Button onClick={() => navigate("/auth")} variant="outline">
+        Sign In / Sign Up
+      </Button>
+    );
+  };
+
   return (
     <div className="min-h-screen bg-gradient-to-b from-secondary to-secondary/95 text-secondary-foreground">
       <div className="container mx-auto px-4 py-12">
@@ -82,6 +114,7 @@ const Index = () => {
           <h1 className="text-3xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-primary to-accent">
             InvestEd
           </h1>
+          {renderAuthButtons()}
         </nav>
 
         {/* Hero Section */}
@@ -99,7 +132,7 @@ const Index = () => {
 
           {/* Sign Up Form */}
           <div className="backdrop-blur-lg bg-white/10 rounded-2xl p-8 shadow-xl animate-fadeIn [animation-delay:400ms]">
-            <form onSubmit={handleSubmit} className="space-y-4">
+            <form onSubmit={handleSubmit} className="space-y-4" id="signup-form">
               <h3 className="text-2xl font-semibold mb-6">Get Started</h3>
               <div>
                 <Input
