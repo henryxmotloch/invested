@@ -3,7 +3,7 @@ import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { SchoolInfo } from "@/types/school";
 import { useNavigate } from "react-router-dom";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 
 interface SchoolCardProps {
   school: SchoolInfo;
@@ -13,6 +13,9 @@ interface SchoolCardProps {
 const SchoolCard = ({ school, index }: SchoolCardProps) => {
   const navigate = useNavigate();
   const [imageError, setImageError] = useState(false);
+  const [displayImage, setDisplayImage] = useState<string>("");
+  // Use ref to prevent unnecessary re-renders
+  const imageSetRef = useRef(false);
   
   // Function to capitalize first letter of each word
   const capitalize = (text: string): string => {
@@ -124,32 +127,46 @@ const SchoolCard = ({ school, index }: SchoolCardProps) => {
     return genericLogos[index % genericLogos.length];
   };
   
-  // Initialize display image
-  const [displayImage, setDisplayImage] = useState<string>("");
-  
-  // Setup image with proper error handling
+  // Setup image with proper error handling - fix infinite loop issue
   useEffect(() => {
-    // First try the provided logo
-    if (school.logo && !imageError) {
-      setDisplayImage(school.logo);
-    } else {
-      // If no logo or error, use fallback
-      const fallbackImg = getFallbackImage();
-      setDisplayImage(fallbackImg);
-      setImageError(false); // Reset error state after switching to fallback
+    // Only set the image once on initial render or when dependencies change
+    const setImage = () => {
+      // First try the provided logo
+      if (school.logo && !imageError) {
+        setDisplayImage(school.logo);
+      } else {
+        // If no logo or error, use fallback
+        const fallbackImg = getFallbackImage();
+        setDisplayImage(fallbackImg);
+      }
+    };
+
+    setImage();
+    
+    // Cleanup function to reset the flag when component unmounts or dependencies change
+    return () => {
+      imageSetRef.current = false;
+    };
+  }, [school.logo, school.name, imageError]); // Only re-run when these dependencies change
+  
+  const handleImageError = () => {
+    if (!imageError) {
+      setImageError(true);
     }
-  }, [school.logo, imageError, school.name]);
+  };
   
   return (
     <Card className="overflow-hidden backdrop-blur-lg bg-white/10 hover:shadow-lg transition-all duration-300">
       <div className="p-6 space-y-6">
         <div className="aspect-square relative overflow-hidden rounded-lg mb-4 bg-white p-4 flex items-center justify-center">
-          <img 
-            src={displayImage} 
-            alt={`${school.name} Logo`}
-            className="object-contain w-full h-full max-h-[140px]"
-            onError={() => setImageError(true)}
-          />
+          {displayImage && (
+            <img 
+              src={displayImage} 
+              alt={`${school.name} Logo`}
+              className="object-contain w-full h-full max-h-[140px]"
+              onError={handleImageError}
+            />
+          )}
         </div>
         
         <h3 className="text-xl font-bold line-clamp-2 h-14">{school.name}</h3>
