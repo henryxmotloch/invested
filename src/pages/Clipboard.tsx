@@ -1,6 +1,6 @@
 
 import { useLocation, useNavigate } from "react-router-dom";
-import { SchoolsLoading } from "@/components/schools/SchoolsLoading";
+import SchoolsLoading from "@/components/schools/SchoolsLoading";
 import UserPreferences from "@/components/schools/UserPreferences";
 import SearchAlerts from "@/components/schools/SearchAlerts";
 import SearchResults from "@/components/schools/SearchResults";
