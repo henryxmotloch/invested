@@ -22,18 +22,33 @@ const SchoolCard = ({ school, index }: SchoolCardProps) => {
       .join(' ');
   };
 
-  // Array of unique school images to use as fallbacks
+  // Expanded array of school logos with all uploaded images
   const schoolImages = [
     "/lovable-uploads/c33828a1-9c0c-4b97-bfdf-ebec721b736e.png", // UBC
     "/lovable-uploads/d5b2677f-869b-4f23-ae7b-8f2ffdac0406.png", // SFU
     "/lovable-uploads/23a8b5bf-5d39-4994-b080-b15ae4f8a454.png", // BCIT
-    "https://upload.wikimedia.org/wikipedia/en/thumb/9/9a/University_of_Toronto_seal.svg/1200px-University_of_Toronto_seal.svg.png",
-    "https://upload.wikimedia.org/wikipedia/en/thumb/6/6e/University_of_Waterloo_seal.svg/1200px-University_of_Waterloo_seal.svg.png",
-    "https://upload.wikimedia.org/wikipedia/en/thumb/2/29/McGill_University_CoA.svg/1200px-McGill_University_CoA.svg.png",
-    "https://upload.wikimedia.org/wikipedia/commons/thumb/0/0a/Concordia_University_logo.svg/1200px-Concordia_University_logo.svg.png",
-    "https://upload.wikimedia.org/wikipedia/en/thumb/c/cf/University_of_Calgary_Logo.svg/1200px-University_of_Calgary_Logo.svg.png",
-    "https://upload.wikimedia.org/wikipedia/commons/thumb/c/c6/University_of_Manitoba_logo.svg/1200px-University_of_Manitoba_logo.svg.png",
-    "https://upload.wikimedia.org/wikipedia/en/thumb/b/b5/University_of_Saskatchewan_shield.svg/1200px-University_of_Saskatchewan_shield.svg.png",
+    "/lovable-uploads/university-of-toronto.png", // UofT
+    "/lovable-uploads/university-of-waterloo.png", // UWaterloo
+    "/lovable-uploads/mcgill-university.png", // McGill
+    "/lovable-uploads/concordia-university.png", // Concordia
+    "/lovable-uploads/university-of-calgary.png", // UCalgary
+    "/lovable-uploads/university-of-manitoba.png", // UManitoba
+    "/lovable-uploads/university-of-saskatchewan.png", // USask
+    "/lovable-uploads/university-of-alberta.png", // UAlberta
+    "/lovable-uploads/university-of-western-ontario.png", // Western
+    "/lovable-uploads/queens-university.png", // Queen's
+    "/lovable-uploads/york-university.png", // York
+    "/lovable-uploads/ryerson-university.png", // Ryerson/TMU
+    "/lovable-uploads/mount-royal-university.png", // Mount Royal
+    "/lovable-uploads/university-of-victoria.png", // UVic
+    "/lovable-uploads/university-of-ottawa.png", // UOttawa
+    "/lovable-uploads/dalhousie-university.png", // Dalhousie
+    "/lovable-uploads/macewan-university.png", // MacEwan
+    "/lovable-uploads/grant-macewan-university.png", // Grant MacEwan
+    "/lovable-uploads/university-of-regina.png", // URegina
+    "/lovable-uploads/university-of-windsor.png", // UWindsor
+    "/lovable-uploads/carleton-university.png", // Carleton
+    "/lovable-uploads/memorial-university.png", // MUN
   ];
 
   // Get appropriate fallback image based on school and index
@@ -47,7 +62,7 @@ const SchoolCard = ({ school, index }: SchoolCardProps) => {
       return schoolImages[1];
     } else if (schoolNameLower.includes("bcit")) {
       return schoolImages[2];
-    } else if (schoolNameLower.includes("toronto")) {
+    } else if (schoolNameLower.includes("toronto") && !schoolNameLower.includes("york")) {
       return schoolImages[3];
     } else if (schoolNameLower.includes("waterloo")) {
       return schoolImages[4];
@@ -59,8 +74,38 @@ const SchoolCard = ({ school, index }: SchoolCardProps) => {
       return schoolImages[7];
     } else if (schoolNameLower.includes("manitoba")) {
       return schoolImages[8];
-    } else if (schoolNameLower.includes("saskatchewan")) {
+    } else if (schoolNameLower.includes("saskatchewan") && !schoolNameLower.includes("regina")) {
       return schoolImages[9];
+    } else if (schoolNameLower.includes("alberta") && !schoolNameLower.includes("macewan")) {
+      return schoolImages[10];
+    } else if (schoolNameLower.includes("western")) {
+      return schoolImages[11];
+    } else if (schoolNameLower.includes("queen")) {
+      return schoolImages[12];
+    } else if (schoolNameLower.includes("york")) {
+      return schoolImages[13];
+    } else if (schoolNameLower.includes("ryerson") || schoolNameLower.includes("metropolitan")) {
+      return schoolImages[14];
+    } else if (schoolNameLower.includes("mount royal")) {
+      return schoolImages[15];
+    } else if (schoolNameLower.includes("victoria")) {
+      return schoolImages[16];
+    } else if (schoolNameLower.includes("ottawa")) {
+      return schoolImages[17];
+    } else if (schoolNameLower.includes("dalhousie")) {
+      return schoolImages[18];
+    } else if (schoolNameLower.includes("macewan") || schoolNameLower.includes("mac ewan")) {
+      return schoolImages[19];
+    } else if (schoolNameLower.includes("grant macewan")) {
+      return schoolImages[20];
+    } else if (schoolNameLower.includes("regina")) {
+      return schoolImages[21];
+    } else if (schoolNameLower.includes("windsor")) {
+      return schoolImages[22];
+    } else if (schoolNameLower.includes("carleton")) {
+      return schoolImages[23];
+    } else if (schoolNameLower.includes("memorial")) {
+      return schoolImages[24];
     }
     
     // If no match found, use the index to select a unique image
