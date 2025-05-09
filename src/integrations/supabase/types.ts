@@ -68,7 +68,6 @@ export type Database = {
           DateAdded: string | null
           EntranceDifficulty: string | null
           GraduateEmployabilityScore: number | null
-          ImageURL: string | null
           InstitutionType: string | null
           IsActive: boolean | null
           Location: string | null
@@ -83,7 +82,6 @@ export type Database = {
           DateAdded?: string | null
           EntranceDifficulty?: string | null
           GraduateEmployabilityScore?: number | null
-          ImageURL?: string | null
           InstitutionType?: string | null
           IsActive?: boolean | null
           Location?: string | null
@@ -98,7 +96,6 @@ export type Database = {
           DateAdded?: string | null
           EntranceDifficulty?: string | null
           GraduateEmployabilityScore?: number | null
-          ImageURL?: string | null
           InstitutionType?: string | null
           IsActive?: boolean | null
           Location?: string | null

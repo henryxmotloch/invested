@@ -23,11 +23,6 @@ const SchoolCard = ({ school }: SchoolCardProps) => {
 
   // Get appropriate fallback image based on program type
   const getFallbackImage = (): string => {
-    // First priority: use imageURL if available from database
-    if (school.imageURL) {
-      return school.imageURL;
-    }
-    
     const program = school.program.toLowerCase();
     
     if (program.includes('computer') || program.includes('software') || program.includes('tech')) {
@@ -84,20 +79,6 @@ const SchoolCard = ({ school }: SchoolCardProps) => {
           <p><span className="font-semibold">Tuition (International):</span> ${school.tuitionInternational.toLocaleString()}</p>
           <p><span className="font-semibold">Job Placement Rate:</span> {school.placementRate}%</p>
           <p><span className="font-semibold">Average Income:</span> ${school.averageIncome.toLocaleString()}</p>
-          
-          {/* Display additional information from updated school table */}
-          {school.worldRanking && (
-            <p><span className="font-semibold">World Ranking:</span> {school.worldRanking}</p>
-          )}
-          {school.graduateEmployabilityScore && (
-            <p><span className="font-semibold">Employability Score:</span> {school.graduateEmployabilityScore}%</p>
-          )}
-          {school.entranceDifficulty && (
-            <p><span className="font-semibold">Entrance Difficulty:</span> {school.entranceDifficulty}</p>
-          )}
-          {school.institutionType && (
-            <p><span className="font-semibold">Institution Type:</span> {capitalize(school.institutionType)}</p>
-          )}
         </div>
         
         <Button 
