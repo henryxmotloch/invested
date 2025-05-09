@@ -18,7 +18,7 @@ const SchoolsList = ({ schools }: SchoolsListProps) => {
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-12">
       {schools.map((school, index) => (
-        <SchoolCard key={index} school={school} />
+        <SchoolCard key={index} school={school} index={index} />
       ))}
     </div>
   );

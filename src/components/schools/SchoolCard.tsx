@@ -3,13 +3,14 @@ import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { SchoolInfo } from "@/types/school";
 import { useNavigate } from "react-router-dom";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 interface SchoolCardProps {
   school: SchoolInfo;
+  index: number; // Added index prop to help with unique image selection
 }
 
-const SchoolCard = ({ school }: SchoolCardProps) => {
+const SchoolCard = ({ school, index }: SchoolCardProps) => {
   const navigate = useNavigate();
   const [imageError, setImageError] = useState(false);
   
@@ -21,31 +22,63 @@ const SchoolCard = ({ school }: SchoolCardProps) => {
       .join(' ');
   };
 
-  // Get appropriate fallback image based on program type
+  // Array of unique school images to use as fallbacks
+  const schoolImages = [
+    "/lovable-uploads/c33828a1-9c0c-4b97-bfdf-ebec721b736e.png", // UBC
+    "/lovable-uploads/d5b2677f-869b-4f23-ae7b-8f2ffdac0406.png", // SFU
+    "/lovable-uploads/23a8b5bf-5d39-4994-b080-b15ae4f8a454.png", // BCIT
+    "https://upload.wikimedia.org/wikipedia/en/thumb/9/9a/University_of_Toronto_seal.svg/1200px-University_of_Toronto_seal.svg.png",
+    "https://upload.wikimedia.org/wikipedia/en/thumb/6/6e/University_of_Waterloo_seal.svg/1200px-University_of_Waterloo_seal.svg.png",
+    "https://upload.wikimedia.org/wikipedia/en/thumb/2/29/McGill_University_CoA.svg/1200px-McGill_University_CoA.svg.png",
+    "https://upload.wikimedia.org/wikipedia/commons/thumb/0/0a/Concordia_University_logo.svg/1200px-Concordia_University_logo.svg.png",
+    "https://upload.wikimedia.org/wikipedia/en/thumb/c/cf/University_of_Calgary_Logo.svg/1200px-University_of_Calgary_Logo.svg.png",
+    "https://upload.wikimedia.org/wikipedia/commons/thumb/c/c6/University_of_Manitoba_logo.svg/1200px-University_of_Manitoba_logo.svg.png",
+    "https://upload.wikimedia.org/wikipedia/en/thumb/b/b5/University_of_Saskatchewan_shield.svg/1200px-University_of_Saskatchewan_shield.svg.png",
+  ];
+
+  // Get appropriate fallback image based on school and index
   const getFallbackImage = (): string => {
-    const program = school.program.toLowerCase();
+    // First try to assign based on school name to maintain consistency
+    const schoolNameLower = school.name.toLowerCase();
     
-    if (program.includes('computer') || program.includes('software') || program.includes('tech')) {
-      return "/lovable-uploads/d5b2677f-869b-4f23-ae7b-8f2ffdac0406.png";
-    } else if (program.includes('business') || program.includes('management') || program.includes('commerce')) {
-      return "/lovable-uploads/c33828a1-9c0c-4b97-bfdf-ebec721b736e.png";
-    } else if (program.includes('engineering') || program.includes('science')) {
-      return "/lovable-uploads/23a8b5bf-5d39-4994-b080-b15ae4f8a454.png";
+    if (schoolNameLower.includes("british columbia") || schoolNameLower.includes("ubc")) {
+      return schoolImages[0];
+    } else if (schoolNameLower.includes("simon fraser") || schoolNameLower.includes("sfu")) {
+      return schoolImages[1];
+    } else if (schoolNameLower.includes("bcit")) {
+      return schoolImages[2];
+    } else if (schoolNameLower.includes("toronto")) {
+      return schoolImages[3];
+    } else if (schoolNameLower.includes("waterloo")) {
+      return schoolImages[4];
+    } else if (schoolNameLower.includes("mcgill")) {
+      return schoolImages[5];
+    } else if (schoolNameLower.includes("concordia")) {
+      return schoolImages[6];
+    } else if (schoolNameLower.includes("calgary")) {
+      return schoolImages[7];
+    } else if (schoolNameLower.includes("manitoba")) {
+      return schoolImages[8];
+    } else if (schoolNameLower.includes("saskatchewan")) {
+      return schoolImages[9];
     }
     
-    // Default image based on province
-    switch (school.province) {
-      case 'bc':
-        return "/lovable-uploads/c33828a1-9c0c-4b97-bfdf-ebec721b736e.png";
-      case 'on':
-        return "/lovable-uploads/d5b2677f-869b-4f23-ae7b-8f2ffdac0406.png";
-      default:
-        return "/lovable-uploads/23a8b5bf-5d39-4994-b080-b15ae4f8a454.png";
-    }
+    // If no match found, use the index to select a unique image
+    // Use modulo to cycle through available images if there are more schools than images
+    return schoolImages[index % schoolImages.length];
   };
   
   // Determine which image to display
-  const displayImage = imageError || !school.logo ? getFallbackImage() : school.logo;
+  const [displayImage, setDisplayImage] = useState(school.logo || getFallbackImage());
+  
+  // Update display image if school logo changes or on error
+  useEffect(() => {
+    if (imageError || !school.logo) {
+      setDisplayImage(getFallbackImage());
+    } else {
+      setDisplayImage(school.logo);
+    }
+  }, [school.logo, imageError]);
   
   return (
     <Card className="overflow-hidden backdrop-blur-lg bg-white/10">
