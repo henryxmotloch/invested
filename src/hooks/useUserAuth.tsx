@@ -40,3 +40,6 @@ export function useUserAuth() {
     signOut
   };
 }
+
+// Add this export for backward compatibility
+export const useAuth = useUserAuth;
