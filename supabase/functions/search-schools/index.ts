@@ -47,6 +47,8 @@ serve(async (req) => {
       )
     }
     
+    console.log(`Retrieved ${schools.length} schools from database before filtering`);
+    
     // Map school data from database to the expected format
     let mappedSchools = schools.map(school => {
       // Get budget range based on tuition
@@ -83,21 +85,21 @@ serve(async (req) => {
     // Filter based on search criteria
     let filteredSchools = mappedSchools
     
-    // Filter by program type
+    // Filter by program type if specified and not 'any'
     if (programType && programType !== 'any') {
       filteredSchools = filteredSchools.filter(school => 
         school.programType.toLowerCase().includes(programType.toLowerCase())
       )
     }
 
-    // Filter by location
+    // Filter by location if specified and not 'any'
     if (location && location !== 'any') {
       filteredSchools = filteredSchools.filter(school => 
         school.province.toLowerCase() === location.toLowerCase()
       )
     }
 
-    // Filter by budget range
+    // Filter by budget range if specified and not 'any'
     if (budget && budget !== 'any') {
       filteredSchools = filteredSchools.filter(school => {
         let schoolBudgetRange = "any"
@@ -111,15 +113,16 @@ serve(async (req) => {
       })
     }
 
-    console.log(`Found ${filteredSchools.length} schools after filtering`)
+    console.log(`Found ${filteredSchools.length} schools after filtering`);
 
-    // If no schools found after filtering, return default schools
+    // Changed behavior: If no schools found after filtering, return all schools without filtering
     if (filteredSchools.length === 0) {
+      console.log('No matches with filters, returning all schools');
       return new Response(
         JSON.stringify({
-          schools: DEFAULT_SCHOOLS,
-          source: "default (no matches)",
-          message: "No matching schools found in database, using defaults"
+          schools: mappedSchools,
+          source: "database (no filter matches - showing all)",
+          message: "No matching schools found with your criteria, showing all schools"
         }),
         { 
           headers: { ...corsHeaders, 'Content-Type': 'application/json' },

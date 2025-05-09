@@ -8,6 +8,8 @@ import SchoolsList from "@/components/schools/SchoolsList";
 import SchoolsLoading from "@/components/schools/SchoolsLoading";
 import CompassPromotion from "@/components/schools/CompassPromotion";
 import { Button } from "@/components/ui/button";
+import { Alert, AlertDescription } from "@/components/ui/alert";
+import { AlertCircle } from "lucide-react";
 
 // Helper function to map location codes to province names
 const getProvinceName = (code: string): string => {
@@ -94,6 +96,8 @@ const Clipboard = () => {
   const [schools, setSchools] = useState<SchoolInfo[]>([]);
   const [loading, setLoading] = useState(true);
   const [searchError, setSearchError] = useState<string | null>(null);
+  const [searchSource, setSearchSource] = useState<string | null>(null);
+  const [searchMessage, setSearchMessage] = useState<string | null>(null);
 
   // Get user preferences from state or use defaults
   const userName = state?.name || "Visitor";
@@ -108,6 +112,8 @@ const Clipboard = () => {
   const searchSchools = async () => {
     setLoading(true);
     setSearchError(null);
+    setSearchSource(null);
+    setSearchMessage(null);
     
     try {
       const response = await fetch("https://ypiokkuwqqmytxthcunp.supabase.co/functions/v1/search-schools", {
@@ -131,6 +137,8 @@ const Clipboard = () => {
       }
       
       console.log("Search results:", data);
+      setSearchSource(data.source);
+      setSearchMessage(data.message);
       
       // Process the returned schools to map database fields to SchoolInfo
       const processedSchools = data.schools?.map((school: any) => {
@@ -175,6 +183,24 @@ const Clipboard = () => {
               userProgramType={getProgramTypeDisplay(userProgramType)}
             />
 
+            {searchSource && searchSource.includes("default") && (
+              <Alert className="mb-6 bg-orange-100 border-orange-300">
+                <AlertCircle className="h-5 w-5 text-orange-500" />
+                <AlertDescription className="text-orange-800">
+                  {searchMessage || "Using default schools. Try adjusting your search criteria."}
+                </AlertDescription>
+              </Alert>
+            )}
+
+            {searchMessage && searchSource?.includes("no filter") && (
+              <Alert className="mb-6 bg-blue-100 border-blue-300">
+                <AlertCircle className="h-5 w-5 text-blue-500" />
+                <AlertDescription className="text-blue-800">
+                  {searchMessage}
+                </AlertDescription>
+              </Alert>
+            )}
+
             {searchError && (
               <div className="p-4 mb-6 bg-destructive/10 text-destructive rounded-md">
                 <p>Error: {searchError}</p>
@@ -186,6 +212,9 @@ const Clipboard = () => {
 
             {!searchError && schools.length > 0 ? (
               <>
+                <div className="mb-4 text-left">
+                  <p className="text-lg">Found {schools.length} schools matching your criteria</p>
+                </div>
                 <SchoolsList schools={schools} />
                 <CompassPromotion />
               </>
