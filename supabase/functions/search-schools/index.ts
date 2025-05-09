@@ -19,21 +19,28 @@ serve(async (req) => {
   try {
     const SUPABASE_URL = Deno.env.get('SUPABASE_URL') as string
     const SUPABASE_ANON_KEY = Deno.env.get('SUPABASE_ANON_KEY') as string
+    
+    if (!SUPABASE_URL || !SUPABASE_ANON_KEY) {
+      console.error('Missing Supabase environment variables')
+      throw new Error('Missing Supabase environment variables')
+    }
+    
     const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY)
 
     // Get request body
     const { fieldOfStudy, location, budget, programType } = await req.json()
     console.log(`Search criteria: field=${fieldOfStudy}, location=${location}, budget=${budget}, program=${programType}`)
 
-    // Try to get schools from the database
-    let { data: schools, error } = await supabase
+    // Fetch all schools from the database - simplified query
+    const { data: schools, error } = await supabase
       .from('School')
       .select('*')
-      .eq('IsActive', true)
-      
+    
+    // Log database response for debugging
+    console.log(`Database query response: schools count=${schools?.length || 0}, error=${error ? JSON.stringify(error) : 'none'}`)
+    
     if (error) {
       console.error('Database error:', error)
-      // Fall back to default schools
       return new Response(
         JSON.stringify({
           schools: DEFAULT_SCHOOLS,
@@ -47,10 +54,8 @@ serve(async (req) => {
       )
     }
     
-    console.log(`Retrieved ${schools?.length || 0} schools from database before filtering`);
-    
     if (!schools || schools.length === 0) {
-      console.log('No schools found in database, using defaults');
+      console.log('No schools found in database, using defaults')
       return new Response(
         JSON.stringify({
           schools: DEFAULT_SCHOOLS,
@@ -64,6 +69,8 @@ serve(async (req) => {
       )
     }
     
+    console.log(`Successfully retrieved ${schools.length} schools from database`)
+    
     // Map school data from database to the expected format
     let mappedSchools = schools.map(school => {
       // Get budget range based on tuition
@@ -75,11 +82,11 @@ serve(async (req) => {
       else budgetRange = "8k-plus"
 
       return {
-        name: school.SchoolName,
-        logo: school.ImageURL,
+        name: school.SchoolName || 'Unknown School',
+        logo: school.ImageURL || '',
         program: "Various Programs", // Default program name
         programType: school.InstitutionType?.toLowerCase() || "degree",
-        website: school.WebsiteURL,
+        website: school.WebsiteURL || '#',
         province: school.Location?.toLowerCase() || "bc",
         admissionGPA: 3.5, // Default values if not in DB
         admissionRate: 60,
@@ -97,7 +104,10 @@ serve(async (req) => {
       }
     })
 
-    // Filter based on search criteria
+    // Log mapped schools for debugging
+    console.log(`Mapped ${mappedSchools.length} schools from database`)
+    
+    // Apply filters if specified - make filters more tolerant and handle null/undefined values
     let filteredSchools = mappedSchools
     
     // Filter by program type if specified and not 'any'
@@ -105,6 +115,7 @@ serve(async (req) => {
       filteredSchools = filteredSchools.filter(school => 
         school.programType && school.programType.toLowerCase().includes(programType.toLowerCase())
       )
+      console.log(`After program type filter: ${filteredSchools.length} schools`)
     }
 
     // Filter by location if specified and not 'any'
@@ -112,13 +123,14 @@ serve(async (req) => {
       filteredSchools = filteredSchools.filter(school => 
         school.province && school.province.toLowerCase() === location.toLowerCase()
       )
+      console.log(`After location filter: ${filteredSchools.length} schools`)
     }
 
     // Filter by budget range if specified and not 'any'
     if (budget && budget !== 'any') {
       filteredSchools = filteredSchools.filter(school => {
         let schoolBudgetRange = "any"
-        const tuition = school.tuitionDomestic
+        const tuition = school.tuitionDomestic || 0
         if (tuition < 2000) schoolBudgetRange = "under-2k"
         else if (tuition < 5000) schoolBudgetRange = "2-5k"
         else if (tuition < 8000) schoolBudgetRange = "5-8k"
@@ -126,13 +138,14 @@ serve(async (req) => {
         
         return schoolBudgetRange === budget
       })
+      console.log(`After budget filter: ${filteredSchools.length} schools`)
     }
 
-    console.log(`Found ${filteredSchools.length} schools after filtering`);
+    console.log(`Final schools count after all filters: ${filteredSchools.length}`)
 
-    // Changed behavior: If no schools found after filtering, return all schools without filtering
+    // If no schools found after filtering, return all schools without filtering
     if (filteredSchools.length === 0) {
-      console.log('No matches with filters, returning all schools');
+      console.log('No matches with filters, returning all mapped schools')
       return new Response(
         JSON.stringify({
           schools: mappedSchools,
@@ -150,6 +163,7 @@ serve(async (req) => {
       JSON.stringify({
         schools: filteredSchools,
         source: "database",
+        schoolCount: filteredSchools.length
       }),
       { 
         headers: { ...corsHeaders, 'Content-Type': 'application/json' },
