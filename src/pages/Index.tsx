@@ -98,11 +98,7 @@ const Index = () => {
       );
     }
 
-    return (
-      <Button onClick={() => navigate("/auth")} variant="outline">
-        Sign In / Sign Up
-      </Button>
-    );
+    return null;
   };
 
   return (
