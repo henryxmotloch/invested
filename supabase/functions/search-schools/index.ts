@@ -47,7 +47,22 @@ serve(async (req) => {
       )
     }
     
-    console.log(`Retrieved ${schools.length} schools from database before filtering`);
+    console.log(`Retrieved ${schools?.length || 0} schools from database before filtering`);
+    
+    if (!schools || schools.length === 0) {
+      console.log('No schools found in database, using defaults');
+      return new Response(
+        JSON.stringify({
+          schools: DEFAULT_SCHOOLS,
+          source: "default (no schools found)",
+          message: "No schools found in database, using defaults"
+        }),
+        { 
+          headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+          status: 200
+        }
+      )
+    }
     
     // Map school data from database to the expected format
     let mappedSchools = schools.map(school => {
@@ -72,7 +87,7 @@ serve(async (req) => {
         tuitionInternational: school.PostgraduateTuition || 20000,
         placementRate: school.GraduateEmployabilityScore || 85,
         averageIncome: 75000,
-        // Add the new fields
+        // Additional fields
         schooId: school.SchoolID,
         imageURL: school.ImageURL,
         worldRanking: school.WorldRanking,
@@ -88,14 +103,14 @@ serve(async (req) => {
     // Filter by program type if specified and not 'any'
     if (programType && programType !== 'any') {
       filteredSchools = filteredSchools.filter(school => 
-        school.programType.toLowerCase().includes(programType.toLowerCase())
+        school.programType && school.programType.toLowerCase().includes(programType.toLowerCase())
       )
     }
 
     // Filter by location if specified and not 'any'
     if (location && location !== 'any') {
       filteredSchools = filteredSchools.filter(school => 
-        school.province.toLowerCase() === location.toLowerCase()
+        school.province && school.province.toLowerCase() === location.toLowerCase()
       )
     }
 
