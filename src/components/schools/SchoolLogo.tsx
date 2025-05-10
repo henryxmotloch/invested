@@ -1,5 +1,6 @@
 
 import { useState, useEffect } from "react";
+import { schoolLogoMap } from "./SchoolLogoUtils";
 
 interface SchoolLogoProps {
   schoolName: string;
@@ -32,9 +33,6 @@ const SchoolLogo = ({ schoolName, logo, index }: SchoolLogoProps) => {
   // Get the appropriate logo for a school
   const getSchoolLogo = (name: string, providedLogo?: string): string => {
     const schoolNameLower = name.toLowerCase();
-    
-    // Import the mapping from utils
-    const { schoolLogoMap } = require("./SchoolLogoUtils");
     
     // 1. Try exact match from our map first
     if (schoolLogoMap[schoolNameLower]) {
