@@ -24,8 +24,9 @@ const SchoolLogo = ({ schoolName, logo, index }: SchoolLogoProps) => {
   const [imageError, setImageError] = useState(false);
   const [displayImage, setDisplayImage] = useState<string>("");
 
-  // Set the image source on component mount
   useEffect(() => {
+    // Reset error state when the school changes
+    setImageError(false);
     const logoToUse = getSchoolLogo(schoolName, logo);
     setDisplayImage(logoToUse);
   }, [schoolName, logo]);
@@ -39,27 +40,31 @@ const SchoolLogo = ({ schoolName, logo, index }: SchoolLogoProps) => {
       return schoolLogoMap[schoolNameLower];
     }
     
-    // 2. Try partial matches
+    // 2. Try partial matches for keywords in school name
     for (const [key, logoPath] of Object.entries(schoolLogoMap)) {
       if (schoolNameLower.includes(key)) {
-        return logoPath as string;
+        return logoPath;
       }
     }
     
-    // 3. If school provides its own logo that's not in our map, use that
-    if (providedLogo && !providedLogo.startsWith("https://upload.wikimedia.org")) {
+    // 3. If school provides its own logo that looks valid, use that
+    if (providedLogo && 
+        providedLogo.length > 10 && 
+        !providedLogo.includes("undefined") && 
+        !providedLogo.startsWith("https://upload.wikimedia.org")) {
       return providedLogo;
     }
     
-    // 4. Use default university logo as fallback
-    return defaultLogo;
+    // 4. Use generic logo based on index as fallback
+    return genericLogos[index % genericLogos.length];
   };
   
   // Handle image error by using fallback
   const handleImageError = () => {
     if (!imageError) {
       setImageError(true);
-      // If error occurs, fall back to a generic logo based on index
+      console.log(`Failed to load image for ${schoolName}, using fallback`);
+      // If error occurs with main logo, try a generic one based on index
       setDisplayImage(genericLogos[index % genericLogos.length]);
     }
   };
@@ -72,6 +77,7 @@ const SchoolLogo = ({ schoolName, logo, index }: SchoolLogoProps) => {
           alt={`${schoolName} Logo`}
           className="object-contain w-full h-full max-h-[140px]"
           onError={handleImageError}
+          loading="lazy"
         />
       )}
     </div>
