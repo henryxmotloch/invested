@@ -1,6 +1,6 @@
 
 import { useState, useEffect } from "react";
-import { schoolLogoMap, logoList } from "./SchoolLogoUtils";
+import { schoolLogoMap, logoList, defaultLogo } from "./SchoolLogoUtils";
 
 interface SchoolLogoProps {
   schoolName: string;
@@ -8,12 +8,9 @@ interface SchoolLogoProps {
   index: number;
 }
 
-// Default logo as fallback
-const defaultLogo = "/lovable-uploads/f28bb5a2-f5e4-49cd-9618-fbb630dd51cc.png";
-
 const SchoolLogo = ({ schoolName, logo, index }: SchoolLogoProps) => {
-  const [imageError, setImageError] = useState(false);
   const [displayImage, setDisplayImage] = useState<string>("");
+  const [imageError, setImageError] = useState(false);
 
   useEffect(() => {
     // Reset error state when the school changes
@@ -29,10 +26,8 @@ const SchoolLogo = ({ schoolName, logo, index }: SchoolLogoProps) => {
     // Normalize the school name
     const schoolNameLower = name.toLowerCase().trim();
     
-    // 1. Try using the provided logo in the school data first if it's valid
-    if (providedLogo && 
-        providedLogo.startsWith("/lovable-uploads/") && 
-        providedLogo.length > 20) {
+    // 1. Try using the provided logo in the school data if it's valid
+    if (providedLogo && isValidPath(providedLogo)) {
       console.log(`Using provided logo for ${name}: ${providedLogo}`);
       return providedLogo;
     }
@@ -55,6 +50,13 @@ const SchoolLogo = ({ schoolName, logo, index }: SchoolLogoProps) => {
     const fallbackLogo = logoList[index % logoList.length];
     console.log(`Using fallback logo for ${name}: ${fallbackLogo}`);
     return fallbackLogo;
+  };
+
+  // Helper function to check if a path is valid
+  const isValidPath = (path: string): boolean => {
+    // For local files, you might want to check if the path follows your expected format
+    // This is a simple check - customize based on your actual path structure
+    return path.length > 0;
   };
   
   // Handle image error by using fallback
