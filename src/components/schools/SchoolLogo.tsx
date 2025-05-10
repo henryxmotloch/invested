@@ -1,6 +1,6 @@
 
 import { useState, useEffect } from "react";
-import { schoolLogoMap } from "./SchoolLogoUtils";
+import { schoolLogoMap, logoList } from "./SchoolLogoUtils";
 
 interface SchoolLogoProps {
   schoolName: string;
@@ -8,17 +8,8 @@ interface SchoolLogoProps {
   index: number;
 }
 
-// Generic university logo as default fallback
+// Default logo as fallback
 const defaultLogo = "/lovable-uploads/f28bb5a2-f5e4-49cd-9618-fbb630dd51cc.png";
-
-// Generic logos for when no exact match is found
-const genericLogos = [
-  "https://images.unsplash.com/photo-1488590528505-98d2b5aba04b?w=300&h=300&fit=crop", 
-  "https://images.unsplash.com/photo-1518770660439-4636190af475?w=300&h=300&fit=crop",
-  "https://images.unsplash.com/photo-1461749280684-dccba630e2f6?w=300&h=300&fit=crop",
-  "https://images.unsplash.com/photo-1486312338219-ce68d2c6f44d?w=300&h=300&fit=crop",
-  "https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?w=300&h=300&fit=crop",
-];
 
 const SchoolLogo = ({ schoolName, logo, index }: SchoolLogoProps) => {
   const [imageError, setImageError] = useState(false);
@@ -27,45 +18,52 @@ const SchoolLogo = ({ schoolName, logo, index }: SchoolLogoProps) => {
   useEffect(() => {
     // Reset error state when the school changes
     setImageError(false);
+    
+    // Get appropriate logo
     const logoToUse = getSchoolLogo(schoolName, logo);
     setDisplayImage(logoToUse);
   }, [schoolName, logo]);
 
   // Get the appropriate logo for a school
   const getSchoolLogo = (name: string, providedLogo?: string): string => {
-    const schoolNameLower = name.toLowerCase();
+    // Normalize the school name
+    const schoolNameLower = name.toLowerCase().trim();
     
-    // 1. Try exact match from our map first
+    // 1. Try using the provided logo in the school data first if it's valid
+    if (providedLogo && 
+        providedLogo.startsWith("/lovable-uploads/") && 
+        providedLogo.length > 20) {
+      console.log(`Using provided logo for ${name}: ${providedLogo}`);
+      return providedLogo;
+    }
+    
+    // 2. Try exact match from our mapping
     if (schoolLogoMap[schoolNameLower]) {
+      console.log(`Found exact match for ${name}: ${schoolLogoMap[schoolNameLower]}`);
       return schoolLogoMap[schoolNameLower];
     }
     
-    // 2. Try partial matches for keywords in school name
+    // 3. Try partial matches for keywords in school name
     for (const [key, logoPath] of Object.entries(schoolLogoMap)) {
       if (schoolNameLower.includes(key)) {
+        console.log(`Found partial match for ${name} with key ${key}: ${logoPath}`);
         return logoPath;
       }
     }
     
-    // 3. If school provides its own logo that looks valid, use that
-    if (providedLogo && 
-        providedLogo.length > 10 && 
-        !providedLogo.includes("undefined") && 
-        !providedLogo.startsWith("https://upload.wikimedia.org")) {
-      return providedLogo;
-    }
-    
-    // 4. Use generic logo based on index as fallback
-    return genericLogos[index % genericLogos.length];
+    // 4. Use a logo from our collection based on index
+    const fallbackLogo = logoList[index % logoList.length];
+    console.log(`Using fallback logo for ${name}: ${fallbackLogo}`);
+    return fallbackLogo;
   };
   
   // Handle image error by using fallback
   const handleImageError = () => {
     if (!imageError) {
       setImageError(true);
-      console.log(`Failed to load image for ${schoolName}, using fallback`);
-      // If error occurs with main logo, try a generic one based on index
-      setDisplayImage(genericLogos[index % genericLogos.length]);
+      console.log(`Failed to load image for ${schoolName}, using default fallback`);
+      // If error occurs with logo, use the default fallback logo
+      setDisplayImage(defaultLogo);
     }
   };
 

@@ -47,7 +47,7 @@ export const DEFAULT_SCHOOLS: SchoolInfo[] = [
   },
   {
     name: "University of Toronto",
-    logo: "/lovable-uploads/d5b2677f-869b-4f23-ae7b-8f2ffdac0406.png",
+    logo: "/lovable-uploads/c33828a1-9c0c-4b97-bfdf-ebec721b736e.png",
     program: "Computer Science",
     programType: "degree",
     website: "https://web.cs.toronto.edu/",
@@ -75,7 +75,7 @@ export const DEFAULT_SCHOOLS: SchoolInfo[] = [
   },
   {
     name: "McGill University",
-    logo: "/lovable-uploads/23a8b5bf-5d39-4994-b080-b15ae4f8a454.png",
+    logo: "/lovable-uploads/67bd3cb4-1e01-47f8-90e0-63553957b020.png",
     program: "Medicine",
     programType: "degree",
     website: "https://www.mcgill.ca/",
@@ -103,7 +103,7 @@ export const DEFAULT_SCHOOLS: SchoolInfo[] = [
   },
   {
     name: "SAIT Polytechnic",
-    logo: "/lovable-uploads/d5b2677f-869b-4f23-ae7b-8f2ffdac0406.png",
+    logo: "/lovable-uploads/67bd3cb4-1e01-47f8-90e0-63553957b020.png",
     program: "Web Development",
     programType: "certificate",
     website: "https://www.sait.ca/",
@@ -159,7 +159,7 @@ export const DEFAULT_SCHOOLS: SchoolInfo[] = [
   },
   {
     name: "Saskatchewan Polytechnic",
-    logo: "/lovable-uploads/d5b2677f-869b-4f23-ae7b-8f2ffdac0406.png",
+    logo: "/lovable-uploads/23a8b5bf-5d39-4994-b080-b15ae4f8a454.png",
     program: "Agricultural Technology",
     programType: "diploma",
     website: "https://saskpolytech.ca/",
