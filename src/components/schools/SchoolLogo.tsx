@@ -1,6 +1,7 @@
 
 import { useState, useEffect } from "react";
 import { schoolLogoMap, logoList, defaultLogo } from "./SchoolLogoUtils";
+import { toast } from "@/hooks/use-toast";
 
 interface SchoolLogoProps {
   schoolName: string;
@@ -54,9 +55,7 @@ const SchoolLogo = ({ schoolName, logo, index }: SchoolLogoProps) => {
 
   // Helper function to check if a path is valid
   const isValidPath = (path: string): boolean => {
-    // For local files, you might want to check if the path follows your expected format
-    // This is a simple check - customize based on your actual path structure
-    return path.length > 0;
+    return path.length > 0 && !path.includes("undefined") && !path.includes("null");
   };
   
   // Handle image error by using fallback
@@ -64,6 +63,11 @@ const SchoolLogo = ({ schoolName, logo, index }: SchoolLogoProps) => {
     if (!imageError) {
       setImageError(true);
       console.log(`Failed to load image for ${schoolName}, using default fallback`);
+      toast({
+        title: "Image loading issue",
+        description: `Could not load logo for ${schoolName}. Using default.`,
+        variant: "destructive"
+      });
       // If error occurs with logo, use the default fallback logo
       setDisplayImage(defaultLogo);
     }
