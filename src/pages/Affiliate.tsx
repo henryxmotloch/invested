@@ -8,6 +8,7 @@ import { toast } from "sonner";
 import { Copy, Users, DollarSign, Mail } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/components/AuthProvider";
+import RssWidget from "@/components/news/RssWidget";
 
 interface Referral {
   id: string;
@@ -21,6 +22,7 @@ const Affiliate = () => {
   const [loading, setLoading] = useState(true);
   const { user } = useAuth();
   const navigate = useNavigate();
+  const [showRssWidget, setShowRssWidget] = useState(false);
 
   // Redirect to auth if not logged in
   useEffect(() => {
@@ -155,6 +157,19 @@ const Affiliate = () => {
             </p>
           </CardFooter>
         </Card>
+        
+        {/* Toggle for RSS Widget */}
+        <div className="flex justify-end mb-4">
+          <Button 
+            variant="outline" 
+            onClick={() => setShowRssWidget(!showRssWidget)}
+          >
+            {showRssWidget ? "Hide" : "Show"} Education News
+          </Button>
+        </div>
+        
+        {/* Conditional RSS Widget */}
+        {showRssWidget && <RssWidget />}
         
         {/* Referrals Table */}
         <Card className="backdrop-blur-lg bg-white/10">

@@ -6,6 +6,7 @@ import { Input } from "@/components/ui/input";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/components/AuthProvider";
+import AffiliateWidget from "@/components/affiliate/AffiliateWidget";
 
 const Index = () => {
   const [name, setName] = useState("");
@@ -290,6 +291,9 @@ const Index = () => {
             </Button>
           </div>
         </div>
+        
+        {/* Display affiliate widget for logged-in users */}
+        {user && <AffiliateWidget />}
       </div>
     </div>
   );
