@@ -19,6 +19,7 @@ const SchoolLogo = ({ schoolName, logo, index }: SchoolLogoProps) => {
     
     // Get appropriate logo
     const logoToUse = getSchoolLogo(schoolName, logo);
+    console.log(`Setting logo for ${schoolName}: ${logoToUse}`);
     setDisplayImage(logoToUse);
   }, [schoolName, logo]);
 
@@ -26,6 +27,8 @@ const SchoolLogo = ({ schoolName, logo, index }: SchoolLogoProps) => {
   const getSchoolLogo = (name: string, providedLogo?: string): string => {
     // Normalize the school name
     const schoolNameLower = name.toLowerCase().trim();
+    
+    console.log(`Finding logo for: ${name}`);
     
     // 1. Try using the provided logo in the school data if it's valid
     if (providedLogo && isValidPath(providedLogo)) {
@@ -55,7 +58,7 @@ const SchoolLogo = ({ schoolName, logo, index }: SchoolLogoProps) => {
 
   // Helper function to check if a path is valid
   const isValidPath = (path: string): boolean => {
-    return path.length > 0 && !path.includes("undefined") && !path.includes("null");
+    return Boolean(path) && path.length > 0 && !path.includes("undefined") && !path.includes("null");
   };
   
   // Handle image error by using fallback
@@ -83,6 +86,9 @@ const SchoolLogo = ({ schoolName, logo, index }: SchoolLogoProps) => {
           onError={handleImageError}
           loading="lazy"
         />
+      )}
+      {!displayImage && (
+        <div className="text-gray-400">No logo</div>
       )}
     </div>
   );
