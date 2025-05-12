@@ -1,7 +1,7 @@
 
 import { useState, useEffect } from "react";
 import { schoolLogoMap, logoList, defaultLogo } from "./SchoolLogoUtils";
-import { toast } from "@/hooks/use-toast";
+import { toast } from "sonner";
 
 interface SchoolLogoProps {
   schoolName: string;
@@ -66,11 +66,12 @@ const SchoolLogo = ({ schoolName, logo, index }: SchoolLogoProps) => {
     if (!imageError) {
       setImageError(true);
       console.log(`Failed to load image for ${schoolName}, using default fallback`);
-      toast({
-        title: "Image loading issue",
-        description: `Could not load logo for ${schoolName}. Using default.`,
-        variant: "destructive"
+      
+      // Display toast message for debugging
+      toast.error(`Could not load logo for ${schoolName}. Using default.`, {
+        duration: 3000,
       });
+      
       // If error occurs with logo, use the default fallback logo
       setDisplayImage(defaultLogo);
     }
@@ -78,7 +79,7 @@ const SchoolLogo = ({ schoolName, logo, index }: SchoolLogoProps) => {
 
   return (
     <div className="aspect-square relative overflow-hidden rounded-lg mb-4 bg-white p-4 flex items-center justify-center">
-      {displayImage && (
+      {displayImage ? (
         <img 
           src={displayImage} 
           alt={`${schoolName} Logo`}
@@ -86,8 +87,7 @@ const SchoolLogo = ({ schoolName, logo, index }: SchoolLogoProps) => {
           onError={handleImageError}
           loading="lazy"
         />
-      )}
-      {!displayImage && (
+      ) : (
         <div className="text-gray-400">No logo</div>
       )}
     </div>

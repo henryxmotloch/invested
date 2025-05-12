@@ -1,6 +1,5 @@
 
 // This file provides a mapping of school names to their logo paths
-// For local development with files on your PC, use relative paths
 
 // Map of school names (lowercase) to their logo file paths
 export const schoolLogoMap: Record<string, string> = {
@@ -91,6 +90,20 @@ export const schoolLogoMap: Record<string, string> = {
   "saint mary's": "/logos/Saint Mary's University.png",
   "vancouver film school": "/logos/Vancouver Film School.jpg",
   "vfs": "/logos/Vancouver Film School.jpg",
+  "langara": "/logos/Langara College.jpg",
+  "langara college": "/logos/Langara College.jpg",
+  "centennial": "/logos/Centennial College.jpg",
+  "centennial college": "/logos/Centennial College.jpg",
+  "george brown": "/logos/George Brown College.jpg",
+  "george brown college": "/logos/George Brown College.jpg",
+  "humber": "/logos/Humber College.jpg",
+  "humber college": "/logos/Humber College.jpg",
+  "sheridan": "/logos/Sheridan College.jpg",
+  "sheridan college": "/logos/Sheridan College.jpg",
+  "conestoga": "/logos/Conestoga College.jpg",
+  "conestoga college": "/logos/Conestoga College.jpg",
+  "douglas": "/logos/Douglas College.jpg",
+  "douglas college": "/logos/Douglas College.jpg",
 };
 
 // A list of fallback logos in case a school name isn't found in the mapping
