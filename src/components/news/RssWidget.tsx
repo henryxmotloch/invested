@@ -34,7 +34,7 @@ export default function RssWidget() {
             </div>
           )}
           <iframe
-            src="https://www.chronicle.com/section/News/6/feed"
+            src="https://rss.app/rss-feed?topicId=scholarships"
             width="100%"
             height="400"
             frameBorder="0"
