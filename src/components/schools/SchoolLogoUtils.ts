@@ -74,7 +74,7 @@ export const schoolLogoMap: Record<string, string> = {
   "red river college": "/logos/Red River College.png",
   "vanier": "/logos/Vanier College.jpg",
   "vanier college": "/logos/Vanier College.jpg",
-  "saskatchewan polytechnic": "/logos/Saskatchewan.jpeg", // This was a duplicate key
+  "saskatchewan polytechnic": "/logos/Saskatchewan.jpeg",
   "sait": "/logos/SAIT.png",
   "sait polytechnic": "/logos/SAIT.png",
   "southern new hampshire university": "/logos/Southern New Hampshire University.jpeg",
@@ -88,8 +88,8 @@ export const schoolLogoMap: Record<string, string> = {
   "nova scotia community college": "/logos/Nova Scotia Community College.jpg",
   "nscc": "/logos/Nova Scotia Community College.jpg",
   "saint mary's university": "/logos/Saint Mary's University.png",
-  "saint mary": "/logos/Saint Mary's University.png",
   "saint mary's": "/logos/Saint Mary's University.png",
+  "saint mary": "/logos/Saint Mary's University.png",
   "vancouver film school": "/logos/Vancouver Film School.jpg",
   "vfs": "/logos/Vancouver Film School.jpg",
   "langara": "/logos/Langara College.png",
