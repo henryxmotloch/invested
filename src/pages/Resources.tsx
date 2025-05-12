@@ -12,9 +12,9 @@ const Resources = () => {
         <h1 className="text-3xl font-bold mb-8">Educational Resources</h1>
         
         <div className="mb-8">
-          <h2 className="text-2xl font-semibold mb-4">Latest Education ROI News</h2>
+          <h2 className="text-2xl font-semibold mb-4">Latest Education News</h2>
           <p className="text-muted-foreground mb-6">
-            Stay updated with the latest news and insights about educational ROI,
+            Stay updated with the latest news and insights about educational trends,
             college financing, and career outcomes.
           </p>
           <RssWidget />

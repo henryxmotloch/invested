@@ -21,7 +21,7 @@ export default function RssWidget() {
   return (
     <Card className="backdrop-blur-lg bg-white/10 mb-6">
       <CardHeader>
-        <CardTitle>Education ROI News</CardTitle>
+        <CardTitle>Education News</CardTitle>
       </CardHeader>
       <CardContent>
         <div className="min-h-[400px] w-full relative">
@@ -34,12 +34,12 @@ export default function RssWidget() {
             </div>
           )}
           <iframe
-            src="https://rss.app/embed/v1/wall/CgU6FdKO3n3WYqCk"
+            src="https://www.universityworldnews.com/rss/"
             width="100%"
             height="400"
             frameBorder="0"
-            scrolling="no"
-            title="ROI Feed"
+            scrolling="yes"
+            title="Education News"
             className="rounded-md overflow-hidden"
             onLoad={() => setIsLoading(false)}
           ></iframe>

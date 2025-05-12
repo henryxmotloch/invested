@@ -24,7 +24,7 @@ const CompassPromotion = () => {
         <Button 
           className="w-full md:w-auto"
           onClick={() => navigate("/info-collection")}
-          variant="outline"
+          variant="default"
         >
           Refine Search
         </Button>
