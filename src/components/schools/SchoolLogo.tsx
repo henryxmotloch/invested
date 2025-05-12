@@ -12,10 +12,12 @@ interface SchoolLogoProps {
 const SchoolLogo = ({ schoolName, logo, index }: SchoolLogoProps) => {
   const [displayImage, setDisplayImage] = useState<string>("");
   const [imageError, setImageError] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     // Reset error state when the school changes
     setImageError(false);
+    setIsLoading(true);
     
     // Get appropriate logo
     const logoToUse = getSchoolLogo(schoolName, logo);
@@ -75,16 +77,30 @@ const SchoolLogo = ({ schoolName, logo, index }: SchoolLogoProps) => {
       // If error occurs with logo, use the default fallback logo
       setDisplayImage(defaultLogo);
     }
+    
+    setIsLoading(false);
+  };
+
+  const handleImageLoad = () => {
+    console.log(`Successfully loaded image for ${schoolName}`);
+    setIsLoading(false);
   };
 
   return (
     <div className="aspect-square relative overflow-hidden rounded-lg mb-4 bg-white p-4 flex items-center justify-center">
+      {isLoading && (
+        <div className="absolute inset-0 flex items-center justify-center bg-gray-100">
+          <div className="animate-pulse w-12 h-12 rounded-full bg-gray-200"></div>
+        </div>
+      )}
+      
       {displayImage ? (
         <img 
           src={displayImage} 
           alt={`${schoolName} Logo`}
-          className="object-contain w-full h-full max-h-[140px]"
+          className={`object-contain w-full h-full max-h-[140px] ${isLoading ? 'opacity-0' : 'opacity-100 transition-opacity duration-300'}`}
           onError={handleImageError}
+          onLoad={handleImageLoad}
           loading="lazy"
         />
       ) : (
