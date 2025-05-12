@@ -34,7 +34,7 @@ export default function RssWidget() {
             </div>
           )}
           <iframe
-            src="https://www.universityworldnews.com/rss/"
+            src="https://www.chronicle.com/section/News/6/feed"
             width="100%"
             height="400"
             frameBorder="0"
