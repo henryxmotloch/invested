@@ -25,7 +25,7 @@ export const schoolLogoMap: Record<string, string> = {
   "manitoba": "/logos/University of Manitoba.jpg",
   "university of saskatchewan": "/logos/University of Saskatchewan.jpg",
   "saskatchewan": "/logos/University of Saskatchewan.jpg",
-  "saskatchewan polytechnic": "/logos/Saskatchewan.jpeg",
+  "sask polytechnic": "/logos/Saskatchewan.jpeg", // Changed key to avoid duplication
   "university of alberta": "/logos/University of Alberta.jpg", 
   "alberta": "/logos/University of Alberta.jpg",
   "university of western ontario": "/logos/Western University.jpg",
@@ -74,10 +74,11 @@ export const schoolLogoMap: Record<string, string> = {
   "red river college": "/logos/Red River College.png",
   "vanier": "/logos/Vanier College.jpg",
   "vanier college": "/logos/Vanier College.jpg",
-  "saskatchewan polytechnic": "/logos/Saskatchewan.jpeg",
+  "saskatchewan polytechnic": "/logos/Saskatchewan.jpeg", // This was a duplicate key
   "sait": "/logos/SAIT.png",
   "sait polytechnic": "/logos/SAIT.png",
   "southern new hampshire university": "/logos/Southern New Hampshire University.jpeg",
+  "southern new hampshire": "/logos/Southern New Hampshire University.jpeg",
   "algonquin college": "/logos/Algonquin College.jpg",
   "algonquin": "/logos/Algonquin College.jpg",
   "athabasca university": "/logos/Athabasca University.jpeg",
