@@ -9,6 +9,7 @@ import Index from "./pages/Index";
 import InfoCollection from "./pages/InfoCollection";
 import NotFound from "./pages/NotFound";
 import Clipboard from "./pages/Clipboard";
+import Resources from "./pages/Resources";
 import Cart from "./pages/Cart";
 import Checkout from "./pages/Checkout";
 import Success from "./pages/Success";
@@ -27,6 +28,7 @@ const AppRoutes = () => (
     <Route path="/success" element={<Success />} />
     <Route path="/auth" element={<Auth />} />
     <Route path="/affiliate" element={<Affiliate />} />
+    <Route path="/resources" element={<Resources />} />
     <Route path="*" element={<NotFound />} />
   </Routes>
 );

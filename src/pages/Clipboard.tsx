@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { toast } from "sonner";
@@ -7,6 +6,7 @@ import UserPreferences from "@/components/schools/UserPreferences";
 import SchoolsList from "@/components/schools/SchoolsList";
 import SchoolsLoading from "@/components/schools/SchoolsLoading";
 import CompassPromotion from "@/components/schools/CompassPromotion";
+import RssWidget from "@/components/news/RssWidget";
 import { Button } from "@/components/ui/button";
 
 // Helper function to map location codes to province names
@@ -172,6 +172,7 @@ const Clipboard = () => {
             {!searchError && schools.length > 0 ? (
               <>
                 <SchoolsList schools={schools} />
+                <RssWidget />
                 <CompassPromotion />
               </>
             ) : !searchError ? (
@@ -191,6 +192,11 @@ const Clipboard = () => {
                 </Button>
               </div>
             ) : null}
+
+            {/* Add RSS Feed Widget when there are no results too */}
+            {!searchError && schools.length === 0 && (
+              <RssWidget />
+            )}
           </>
         )}
       </div>
