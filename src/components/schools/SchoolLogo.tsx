@@ -51,9 +51,28 @@ const SchoolLogo = ({ schoolName, logo, index }: SchoolLogoProps) => {
         return logoPath;
       }
     }
+
+    // 4. Try handling Saint/St variations
+    if (schoolNameLower.includes("saint") || schoolNameLower.includes("st.") || schoolNameLower.includes("st ")) {
+      const normalizedName = schoolNameLower
+        .replace("saint", "saint")
+        .replace("st.", "saint")
+        .replace("st ", "saint ");
+      
+      for (const [key, logoPath] of Object.entries(schoolLogoMap)) {
+        if (key.includes("saint") && normalizedName.includes(key.replace("saint", ""))) {
+          console.log(`Found saint/st match for ${name} with key ${key}: ${logoPath}`);
+          return logoPath;
+        }
+      }
+    }
     
-    // 4. Use a logo from our collection based on index
-    const fallbackLogo = logoList[index % logoList.length];
+    // 5. Use a logo from our collection based on index
+    const fallbackIndex = Math.abs(schoolNameLower.split("").reduce(
+      (acc, char) => acc + char.charCodeAt(0), 0
+    ) % logoList.length);
+    
+    const fallbackLogo = logoList[fallbackIndex];
     console.log(`Using fallback logo for ${name}: ${fallbackLogo}`);
     return fallbackLogo;
   };

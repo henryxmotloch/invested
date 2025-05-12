@@ -25,7 +25,7 @@ export const schoolLogoMap: Record<string, string> = {
   "manitoba": "/logos/University of Manitoba.jpg",
   "university of saskatchewan": "/logos/University of Saskatchewan.jpg",
   "saskatchewan": "/logos/University of Saskatchewan.jpg",
-  "sask polytechnic": "/logos/Saskatchewan.jpeg", // Changed key to avoid duplication
+  "sask polytechnic": "/logos/Saskatchewan.jpeg",
   "university of alberta": "/logos/University of Alberta.jpg", 
   "alberta": "/logos/University of Alberta.jpg",
   "university of western ontario": "/logos/Western University.jpg",
@@ -88,8 +88,13 @@ export const schoolLogoMap: Record<string, string> = {
   "nova scotia community college": "/logos/Nova Scotia Community College.jpg",
   "nscc": "/logos/Nova Scotia Community College.jpg",
   "saint mary's university": "/logos/Saint Mary's University.png",
+  "saint marys university": "/logos/Saint Mary's University.png",
   "saint mary's": "/logos/Saint Mary's University.png",
-  "saint mary": "/logos/Saint Mary's University.png",
+  "saint marys": "/logos/Saint Mary's University.png",
+  "st. mary's": "/logos/Saint Mary's University.png",
+  "st. marys": "/logos/Saint Mary's University.png",
+  "st mary's": "/logos/Saint Mary's University.png",
+  "st marys": "/logos/Saint Mary's University.png",
   "vancouver film school": "/logos/Vancouver Film School.jpg",
   "vfs": "/logos/Vancouver Film School.jpg",
   "langara": "/logos/Langara College.png",
@@ -115,6 +120,7 @@ export const logoList = [
   "/logos/Seneca College.jpg",
   "/logos/Dalhousie University.jpeg",
   "/logos/Saskatchewan.jpeg",
+  "/logos/Saint Mary's University.png",
 ];
 
 // Default logo as global fallback
