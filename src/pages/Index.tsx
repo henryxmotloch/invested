@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { DollarSign, ChartBar, PiggyBank, Calculator, TrendingUp, Briefcase, UserPlus } from "lucide-react";
@@ -24,6 +23,11 @@ const Index = () => {
     
     if (!name) {
       toast.error("Please enter your name");
+      return;
+    }
+    
+    if (!subscribeToEmails) {
+      toast.error("Please agree to receive updates on top ROI programs");
       return;
     }
 
@@ -170,6 +174,7 @@ const Index = () => {
                   id="subscribeToEmails" 
                   checked={subscribeToEmails}
                   onCheckedChange={(checked) => setSubscribeToEmails(checked === true)}
+                  required
                 />
                 <Label 
                   htmlFor="subscribeToEmails" 

@@ -12,9 +12,6 @@ import {
 import { useState } from "react";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
-import { Checkbox } from "@/components/ui/checkbox";
-import { Label } from "@/components/ui/label";
-import RssWidget from "@/components/news/RssWidget";
 
 interface LocationState {
   name: string;
@@ -32,7 +29,6 @@ const InfoCollection = () => {
   const [fieldOfStudy, setFieldOfStudy] = useState("");
   const [paymentOption, setPaymentOption] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [subscribed, setSubscribed] = useState(false);
 
   console.log("InfoCollection state received:", state);
 
@@ -46,11 +42,6 @@ const InfoCollection = () => {
     
     if (!paymentOption) {
       toast.error("Please select a payment option");
-      return;
-    }
-
-    if (!subscribed) {
-      toast.error("Please agree to receive updates on top ROI programs");
       return;
     }
     
@@ -73,7 +64,7 @@ const InfoCollection = () => {
           fieldOfStudy,
           programType,
           paymentOption,
-          subscribed
+          subscribed: true // Always set to true as it's required from the previous page
         }),
       });
       
@@ -93,7 +84,7 @@ const InfoCollection = () => {
           fieldOfStudy,
           programType,
           paymentOption,
-          subscribed
+          subscribed: true
         } 
       });
     } catch (error) {
@@ -106,7 +97,7 @@ const InfoCollection = () => {
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-secondary to-secondary/95 text-secondary-foreground">
-      <div className="container mx-auto px-4 py-12 flex items-center justify-center flex-col">
+      <div className="container mx-auto px-4 py-12 flex flex-col items-center">
         <Card className="p-8 backdrop-blur-lg bg-white/10 w-full max-w-2xl mx-auto">
           <h1 className="text-3xl font-bold mb-6">Welcome, {state.name}!</h1>
           <p className="text-lg text-muted-foreground mb-8">
@@ -203,29 +194,21 @@ const InfoCollection = () => {
               </Select>
             </div>
 
-            <div className="flex items-center space-x-2 pt-4 pb-2">
-              <Checkbox 
-                id="newsletter" 
-                checked={subscribed}
-                onCheckedChange={(checked) => setSubscribed(checked as boolean)}
-                required
-              />
-              <Label htmlFor="newsletter" className="font-medium">
-                Want updates on top ROI programs?
-              </Label>
-            </div>
-
             <Button type="submit" className="w-full" disabled={isSubmitting}>
               {isSubmitting ? "Submitting..." : "Next"}
             </Button>
           </form>
         </Card>
 
-        {/* RSS Widget */}
+        {/* Latest Education News */}
         <div className="mt-8 w-full max-w-2xl">
           <div className="bg-white/10 backdrop-blur-lg p-4 rounded-lg">
             <h2 className="text-xl font-semibold mb-4 text-center">Latest Education News</h2>
-            <RssWidget />
+            <img 
+              src="/lovable-uploads/24f5d9d1-3c58-4a28-9bb6-53d713cb0f36.png" 
+              alt="Latest Education News" 
+              className="w-full rounded-md"
+            />
           </div>
         </div>
       </div>

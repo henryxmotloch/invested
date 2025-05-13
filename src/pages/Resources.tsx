@@ -5,7 +5,6 @@ import { useNavigate } from "react-router-dom";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Label } from "@/components/ui/label";
 import { toast } from "sonner";
-import RssWidget from "@/components/news/RssWidget";
 
 const Resources = () => {
   const navigate = useNavigate();
@@ -24,11 +23,15 @@ const Resources = () => {
       <div className="container mx-auto px-4 py-12">
         <h1 className="text-3xl font-bold mb-8">Educational Resources</h1>
         
-        {/* RSS Feed */}
+        {/* Static Education News Image */}
         <div className="mb-12">
           <h2 className="text-2xl font-semibold mb-4">Latest Education News</h2>
           <div className="bg-white/10 backdrop-blur-lg p-4 rounded-lg">
-            <RssWidget />
+            <img 
+              src="/lovable-uploads/24f5d9d1-3c58-4a28-9bb6-53d713cb0f36.png" 
+              alt="Latest Education News" 
+              className="w-full rounded-md"
+            />
           </div>
         </div>
         
