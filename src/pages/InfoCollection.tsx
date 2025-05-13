@@ -1,4 +1,3 @@
-
 import { useLocation, Navigate, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
@@ -12,6 +11,7 @@ import {
 import { useState } from "react";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
+import RssWidget from "@/components/news/RssWidget";
 
 interface LocationState {
   name: string;
@@ -96,107 +96,115 @@ const InfoCollection = () => {
   return (
     <div className="min-h-screen bg-gradient-to-b from-secondary to-secondary/95 text-secondary-foreground">
       <div className="container mx-auto px-4 py-12">
-        <Card className="max-w-2xl mx-auto p-8 backdrop-blur-lg bg-white/10">
-          <h1 className="text-3xl font-bold mb-6">Welcome, {state.name}!</h1>
-          <p className="text-lg text-muted-foreground mb-8">
-            Enter your goals so the InvestEd compass can point you to success...
-          </p>
+        <div className="grid md:grid-cols-3 gap-8">
+          <div className="md:col-span-2">
+            <Card className="p-8 backdrop-blur-lg bg-white/10">
+              <h1 className="text-3xl font-bold mb-6">Welcome, {state.name}!</h1>
+              <p className="text-lg text-muted-foreground mb-8">
+                Enter your goals so the InvestEd compass can point you to success...
+              </p>
+              
+              <form onSubmit={handleSubmit} className="space-y-6">
+                <div className="space-y-2">
+                  <label className="text-lg font-medium">Field of Study:</label>
+                  <Select value={fieldOfStudy} onValueChange={setFieldOfStudy}>
+                    <SelectTrigger className="w-full bg-white/40 border-white/20">
+                      <SelectValue placeholder="Select your field of study..." />
+                    </SelectTrigger>
+                    <SelectContent className="bg-white border-white/20">
+                      <SelectItem value="any">Any Field</SelectItem>
+                      <SelectItem value="business">Business</SelectItem>
+                      <SelectItem value="computer-science">Computer Science</SelectItem>
+                      <SelectItem value="engineering">Engineering</SelectItem>
+                      <SelectItem value="medicine">Medicine</SelectItem>
+                      <SelectItem value="arts">Arts</SelectItem>
+                      <SelectItem value="education">Education</SelectItem>
+                      <SelectItem value="law">Law</SelectItem>
+                      <SelectItem value="agriculture">Agriculture</SelectItem>
+                      <SelectItem value="culinary">Culinary Arts</SelectItem>
+                      <SelectItem value="other">Other</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+                
+                <div className="space-y-2">
+                  <label className="text-lg font-medium">Preferred Campus Location:</label>
+                  <Select value={location_} onValueChange={setLocation}>
+                    <SelectTrigger className="w-full bg-white/40 border-white/20">
+                      <SelectValue placeholder="Select a location..." />
+                    </SelectTrigger>
+                    <SelectContent className="bg-white border-white/20">
+                      <SelectItem value="any">Any Location</SelectItem>
+                      <SelectItem value="bc">British Columbia</SelectItem>
+                      <SelectItem value="ab">Alberta</SelectItem>
+                      <SelectItem value="sk">Saskatchewan</SelectItem>
+                      <SelectItem value="mb">Manitoba</SelectItem>
+                      <SelectItem value="on">Ontario</SelectItem>
+                      <SelectItem value="qc">Quebec</SelectItem>
+                      <SelectItem value="mt">Maritimes</SelectItem>
+                      <SelectItem value="remote">Remote Only</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+
+                <div className="space-y-2">
+                  <label className="text-lg font-medium">Budget Range:</label>
+                  <Select value={budget} onValueChange={setBudget}>
+                    <SelectTrigger className="w-full bg-white/40 border-white/20">
+                      <SelectValue placeholder="Select your budget..." />
+                    </SelectTrigger>
+                    <SelectContent className="bg-white border-white/20">
+                      <SelectItem value="any">Any Budget</SelectItem>
+                      <SelectItem value="under-2k">Under $2,000</SelectItem>
+                      <SelectItem value="2-5k">$2,000 - $5,000</SelectItem>
+                      <SelectItem value="5-8k">$5,000 - $8,000</SelectItem>
+                      <SelectItem value="8k-plus">Over $8,000</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+
+                <div className="space-y-2">
+                  <label className="text-lg font-medium">Program Type:</label>
+                  <Select value={programType} onValueChange={setProgramType}>
+                    <SelectTrigger className="w-full bg-white/40 border-white/20">
+                      <SelectValue placeholder="Select program type..." />
+                    </SelectTrigger>
+                    <SelectContent className="bg-white border-white/20">
+                      <SelectItem value="any">Any Type</SelectItem>
+                      <SelectItem value="certificate">Certificate</SelectItem>
+                      <SelectItem value="diploma">Diploma</SelectItem>
+                      <SelectItem value="degree">Degree</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+
+                <div className="space-y-2 mt-8">
+                  <label className="text-lg font-medium">Payment Method:</label>
+                  <Select value={paymentOption} onValueChange={setPaymentOption}>
+                    <SelectTrigger className="w-full bg-white/40 border-white/20">
+                      <SelectValue placeholder="Select payment option..." />
+                    </SelectTrigger>
+                    <SelectContent className="bg-white border-white/20">
+                      <SelectItem value="upfront">Pay Upfront</SelectItem>
+                      <SelectItem value="installments">Monthly Installments</SelectItem>
+                      <SelectItem value="student-loan">Student Loan</SelectItem>
+                      <SelectItem value="scholarship">Scholarship</SelectItem>
+                      <SelectItem value="employer">Employer Sponsored</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+
+                <Button type="submit" className="w-full" disabled={isSubmitting}>
+                  {isSubmitting ? "Submitting..." : "Next"}
+                </Button>
+              </form>
+            </Card>
+          </div>
           
-          <form onSubmit={handleSubmit} className="space-y-6">
-            <div className="space-y-2">
-              <label className="text-lg font-medium">Field of Study:</label>
-              <Select value={fieldOfStudy} onValueChange={setFieldOfStudy}>
-                <SelectTrigger className="w-full bg-white/40 border-white/20">
-                  <SelectValue placeholder="Select your field of study..." />
-                </SelectTrigger>
-                <SelectContent className="bg-white border-white/20">
-                  <SelectItem value="any">Any Field</SelectItem>
-                  <SelectItem value="business">Business</SelectItem>
-                  <SelectItem value="computer-science">Computer Science</SelectItem>
-                  <SelectItem value="engineering">Engineering</SelectItem>
-                  <SelectItem value="medicine">Medicine</SelectItem>
-                  <SelectItem value="arts">Arts</SelectItem>
-                  <SelectItem value="education">Education</SelectItem>
-                  <SelectItem value="law">Law</SelectItem>
-                  <SelectItem value="agriculture">Agriculture</SelectItem>
-                  <SelectItem value="culinary">Culinary Arts</SelectItem>
-                  <SelectItem value="other">Other</SelectItem>
-                </SelectContent>
-              </Select>
-            </div>
-            
-            <div className="space-y-2">
-              <label className="text-lg font-medium">Preferred Campus Location:</label>
-              <Select value={location_} onValueChange={setLocation}>
-                <SelectTrigger className="w-full bg-white/40 border-white/20">
-                  <SelectValue placeholder="Select a location..." />
-                </SelectTrigger>
-                <SelectContent className="bg-white border-white/20">
-                  <SelectItem value="any">Any Location</SelectItem>
-                  <SelectItem value="bc">British Columbia</SelectItem>
-                  <SelectItem value="ab">Alberta</SelectItem>
-                  <SelectItem value="sk">Saskatchewan</SelectItem>
-                  <SelectItem value="mb">Manitoba</SelectItem>
-                  <SelectItem value="on">Ontario</SelectItem>
-                  <SelectItem value="qc">Quebec</SelectItem>
-                  <SelectItem value="mt">Maritimes</SelectItem>
-                  <SelectItem value="remote">Remote Only</SelectItem>
-                </SelectContent>
-              </Select>
-            </div>
-
-            <div className="space-y-2">
-              <label className="text-lg font-medium">Budget Range:</label>
-              <Select value={budget} onValueChange={setBudget}>
-                <SelectTrigger className="w-full bg-white/40 border-white/20">
-                  <SelectValue placeholder="Select your budget..." />
-                </SelectTrigger>
-                <SelectContent className="bg-white border-white/20">
-                  <SelectItem value="any">Any Budget</SelectItem>
-                  <SelectItem value="under-2k">Under $2,000</SelectItem>
-                  <SelectItem value="2-5k">$2,000 - $5,000</SelectItem>
-                  <SelectItem value="5-8k">$5,000 - $8,000</SelectItem>
-                  <SelectItem value="8k-plus">Over $8,000</SelectItem>
-                </SelectContent>
-              </Select>
-            </div>
-
-            <div className="space-y-2">
-              <label className="text-lg font-medium">Program Type:</label>
-              <Select value={programType} onValueChange={setProgramType}>
-                <SelectTrigger className="w-full bg-white/40 border-white/20">
-                  <SelectValue placeholder="Select program type..." />
-                </SelectTrigger>
-                <SelectContent className="bg-white border-white/20">
-                  <SelectItem value="any">Any Type</SelectItem>
-                  <SelectItem value="certificate">Certificate</SelectItem>
-                  <SelectItem value="diploma">Diploma</SelectItem>
-                  <SelectItem value="degree">Degree</SelectItem>
-                </SelectContent>
-              </Select>
-            </div>
-
-            <div className="space-y-2 mt-8">
-              <label className="text-lg font-medium">Payment Method:</label>
-              <Select value={paymentOption} onValueChange={setPaymentOption}>
-                <SelectTrigger className="w-full bg-white/40 border-white/20">
-                  <SelectValue placeholder="Select payment option..." />
-                </SelectTrigger>
-                <SelectContent className="bg-white border-white/20">
-                  <SelectItem value="upfront">Pay Upfront</SelectItem>
-                  <SelectItem value="installments">Monthly Installments</SelectItem>
-                  <SelectItem value="student-loan">Student Loan</SelectItem>
-                  <SelectItem value="scholarship">Scholarship</SelectItem>
-                  <SelectItem value="employer">Employer Sponsored</SelectItem>
-                </SelectContent>
-              </Select>
-            </div>
-
-            <Button type="submit" className="w-full" disabled={isSubmitting}>
-              {isSubmitting ? "Submitting..." : "Next"}
-            </Button>
-          </form>
-        </Card>
+          <div className="md:col-span-1">
+            <RssWidget />
+          </div>
+        </div>
       </div>
     </div>
   );

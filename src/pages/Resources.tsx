@@ -1,5 +1,4 @@
 
-import RssWidget from "@/components/news/RssWidget";
 import { Button } from "@/components/ui/button";
 import { useNavigate } from "react-router-dom";
 
@@ -11,15 +10,6 @@ const Resources = () => {
       <div className="container mx-auto px-4 py-12">
         <h1 className="text-3xl font-bold mb-8">Educational Resources</h1>
         
-        <div className="mb-8">
-          <h2 className="text-2xl font-semibold mb-4">Latest Education News</h2>
-          <p className="text-muted-foreground mb-6">
-            Stay updated with the latest news and insights about educational trends,
-            college financing, and career outcomes.
-          </p>
-          <RssWidget />
-        </div>
-
         <div className="mt-12 flex flex-col md:flex-row items-center gap-6">
           <div className="bg-white/10 backdrop-blur-lg p-6 rounded-lg flex-1">
             <h3 className="text-xl font-semibold mb-3">Ready to compare schools?</h3>

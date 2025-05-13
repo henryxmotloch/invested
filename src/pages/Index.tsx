@@ -1,3 +1,4 @@
+
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { DollarSign, ChartBar, PiggyBank, Calculator, TrendingUp, Briefcase, UserPlus } from "lucide-react";
@@ -7,11 +8,14 @@ import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/components/AuthProvider";
 import AffiliateWidget from "@/components/affiliate/AffiliateWidget";
+import { Checkbox } from "@/components/ui/checkbox";
+import { Label } from "@/components/ui/label";
 
 const Index = () => {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [loading, setLoading] = useState(false);
+  const [subscribeToEmails, setSubscribeToEmails] = useState(false);
   const navigate = useNavigate();
   const { user } = useAuth();
 
@@ -29,7 +33,7 @@ const Index = () => {
       // Generate a unique user ID based on timestamp
       const userId = Date.now().toString();
       
-      console.log("Submitting user data:", { name, email, userId });
+      console.log("Submitting user data:", { name, email, userId, subscribeToEmails });
       
       // Call our Edge Function to save the user data
       const response = await fetch("https://ypiokkuwqqmytxthcunp.supabase.co/functions/v1/save-user-info", {
@@ -39,7 +43,12 @@ const Index = () => {
           // Include Supabase anon key for authorization
           "Authorization": `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InlwaW9ra3V3cXFteXR4dGhjdW5wIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDA1MDkzNDEsImV4cCI6MjA1NjA4NTM0MX0.zZEou6YV13cRe0mqo44MtRM6wVVy6CNLQJmEHrLCe00`
         },
-        body: JSON.stringify({ name, email, userId }),
+        body: JSON.stringify({ 
+          name, 
+          email, 
+          userId,
+          subscribeToEmails 
+        }),
       });
       
       const responseText = await response.text();
@@ -59,7 +68,11 @@ const Index = () => {
       
       console.log("Save user response:", result);
       
-      toast.success("Welcome to InvestEd!");
+      if (subscribeToEmails && email) {
+        toast.success("Thank you for subscribing to updates!");
+      } else {
+        toast.success("Welcome to InvestEd!");
+      }
       
       // Make sure we properly redirect to info-collection with the necessary user data
       navigate("/info-collection", { 
@@ -151,6 +164,21 @@ const Index = () => {
                   disabled={loading}
                 />
               </div>
+              
+              <div className="flex items-center space-x-2">
+                <Checkbox 
+                  id="subscribeToEmails" 
+                  checked={subscribeToEmails}
+                  onCheckedChange={(checked) => setSubscribeToEmails(checked === true)}
+                />
+                <Label 
+                  htmlFor="subscribeToEmails" 
+                  className="text-sm text-white/80 font-normal cursor-pointer"
+                >
+                  Want updates on top ROI programs?
+                </Label>
+              </div>
+              
               <Button type="submit" className="w-full" size="lg" disabled={loading}>
                 {loading ? "Setting up your account..." : "Begin Your Journey"}
               </Button>
