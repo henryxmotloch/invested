@@ -6,12 +6,15 @@ import { Input } from "@/components/ui/input";
 import { Card } from "@/components/ui/card";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
+import { Checkbox } from "@/components/ui/checkbox";
+import { Label } from "@/components/ui/label";
 
 const Auth = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
   const [isSignUp, setIsSignUp] = useState(false);
+  const [acceptTerms, setAcceptTerms] = useState(false);
   const navigate = useNavigate();
   const location = useLocation();
   
@@ -31,6 +34,13 @@ const Auth = () => {
 
     try {
       if (isSignUp) {
+        // Validate terms acceptance for signup
+        if (!acceptTerms) {
+          toast.error("You must accept the terms to create an account");
+          setLoading(false);
+          return;
+        }
+
         // Sign up
         const { data: signUpData, error: signUpError } = await supabase.auth.signUp({
           email,
@@ -113,6 +123,20 @@ const Auth = () => {
               minLength={6}
             />
           </div>
+          
+          {isSignUp && (
+            <div className="flex items-center space-x-2">
+              <Checkbox 
+                id="terms" 
+                checked={acceptTerms}
+                onCheckedChange={(checked) => setAcceptTerms(checked as boolean)}
+              />
+              <Label htmlFor="terms" className="text-sm">
+                I agree to receive educational updates and newsletters
+              </Label>
+            </div>
+          )}
+          
           <Button type="submit" className="w-full" disabled={loading}>
             {loading ? "Processing..." : isSignUp ? "Sign Up" : "Sign In"}
           </Button>
