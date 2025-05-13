@@ -23,12 +23,12 @@ const Resources = () => {
       <div className="container mx-auto px-4 py-12">
         <h1 className="text-3xl font-bold mb-8">Educational Resources</h1>
         
-        {/* Static Education News Image */}
-        <div className="mb-12">
+        {/* Latest Education News - Moved to top and made smaller */}
+        <div className="mb-12 max-w-2xl mx-auto">
           <h2 className="text-2xl font-semibold mb-4">Latest Education News</h2>
           <div className="bg-white/10 backdrop-blur-lg p-4 rounded-lg">
             <img 
-              src="/lovable-uploads/24f5d9d1-3c58-4a28-9bb6-53d713cb0f36.png" 
+              src="/lovable-uploads/874a2a3e-b636-4be9-bd44-317daeecd44d.png" 
               alt="Latest Education News" 
               className="w-full rounded-md"
             />

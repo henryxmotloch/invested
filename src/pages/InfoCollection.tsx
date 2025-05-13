@@ -1,4 +1,3 @@
-
 import { useLocation, Navigate, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
@@ -205,7 +204,7 @@ const InfoCollection = () => {
           <div className="bg-white/10 backdrop-blur-lg p-4 rounded-lg">
             <h2 className="text-xl font-semibold mb-4 text-center">Latest Education News</h2>
             <img 
-              src="/lovable-uploads/24f5d9d1-3c58-4a28-9bb6-53d713cb0f36.png" 
+              src="/lovable-uploads/874a2a3e-b636-4be9-bd44-317daeecd44d.png" 
               alt="Latest Education News" 
               className="w-full rounded-md"
             />
