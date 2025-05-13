@@ -5,6 +5,7 @@ import { toast } from "sonner";
 
 export default function RssWidget() {
   const [isLoading, setIsLoading] = useState(true);
+  const [loadError, setLoadError] = useState(false);
   
   useEffect(() => {
     // Add a timeout to check if the iframe loaded properly
@@ -18,10 +19,17 @@ export default function RssWidget() {
     return () => clearTimeout(timer);
   }, [isLoading]);
 
+  const handleIframeError = () => {
+    console.log("RSS feed failed to load");
+    setLoadError(true);
+    setIsLoading(false);
+    toast.error("Failed to load the news feed. Please try again later.");
+  };
+
   return (
     <Card className="backdrop-blur-lg bg-white/10 mb-6">
       <CardHeader>
-        <CardTitle>Education News</CardTitle>
+        <CardTitle>Marketing & Advertising News</CardTitle>
       </CardHeader>
       <CardContent>
         <div className="min-h-[400px] w-full relative">
@@ -33,16 +41,27 @@ export default function RssWidget() {
               </div>
             </div>
           )}
-          <iframe
-            src="https://rss.app/rss-feed?topicId=scholarships"
-            width="100%"
-            height="400"
-            frameBorder="0"
-            scrolling="yes"
-            title="Education News"
-            className="rounded-md overflow-hidden"
-            onLoad={() => setIsLoading(false)}
-          ></iframe>
+          
+          {loadError ? (
+            <div className="h-[400px] flex items-center justify-center bg-destructive/10 text-destructive rounded-md p-4">
+              <div className="text-center">
+                <p className="font-medium">Failed to load news feed</p>
+                <p className="text-sm mt-2">Please check your connection and try again</p>
+              </div>
+            </div>
+          ) : (
+            <iframe
+              src="https://rss.app/rss-feed?keyword=Marketing%20%2F%20advertising&region=US&lang=en"
+              width="100%"
+              height="400"
+              frameBorder="0"
+              scrolling="yes"
+              title="Marketing & Advertising News"
+              className="rounded-md overflow-hidden"
+              onLoad={() => setIsLoading(false)}
+              onError={handleIframeError}
+            ></iframe>
+          )}
         </div>
       </CardContent>
     </Card>
