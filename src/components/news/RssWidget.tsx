@@ -9,7 +9,7 @@ export default function RssWidget() {
   const iframeRef = useRef<HTMLIFrameElement>(null);
   const timeoutRef = useRef<number | null>(null);
 
-  const rssUrl = 'https://rss.app/rss-feed?keyword=Marketing%20%2F%20advertising&region=US&lang=en';
+  const rssUrl = 'https://rss.app/rss-feed?keyword=Education%20%2F%20ROI&region=US&lang=en';
 
   const handleLoad = () => {
     setLoading(false);
@@ -69,7 +69,7 @@ export default function RssWidget() {
         <div className="absolute inset-0 flex items-center justify-center bg-black/10 backdrop-blur-sm z-10">
           <div className="text-center">
             <Loader2 className="h-10 w-10 animate-spin mx-auto mb-2" />
-            <p className="text-sm">Loading latest news...</p>
+            <p className="text-sm">Loading latest education news...</p>
           </div>
         </div>
       )}

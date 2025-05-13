@@ -14,6 +14,8 @@ const Resources = () => {
   const handleSubscribe = () => {
     if (subscribed) {
       toast.success("Thanks for subscribing to our newsletter!");
+    } else {
+      toast.error("Please check the subscription box first");
     }
   };
   
@@ -55,6 +57,7 @@ const Resources = () => {
                 id="newsletter" 
                 checked={subscribed}
                 onCheckedChange={(checked) => setSubscribed(checked as boolean)}
+                required
               />
               <Label htmlFor="newsletter">
                 Want updates on top ROI programs?
